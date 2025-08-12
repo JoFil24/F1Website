@@ -93,6 +93,13 @@ namespace F1Website.Controllers
                 return NotFound();
             }
 
+            var driverTeams = await _context.DriverTeams.Where(i => i.TeamId == id).ToListAsync();
+
+            foreach (var driverTeam in driverTeams)
+            {
+                _context.DriverTeams.Remove(driverTeam);
+            }
+
             _context.Teams.Remove(team);
             await _context.SaveChangesAsync();
 

@@ -5,8 +5,7 @@ using System.Text.Json.Serialization;
 namespace F1Website.Models;
 
 public partial class Race
-{
-    [JsonIgnore]
+{ 
     public int Id { get; set; }
 
     public DateTime RaceDate { get; set; }

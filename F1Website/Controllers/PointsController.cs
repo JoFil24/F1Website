@@ -43,14 +43,49 @@ namespace F1Website.Controllers
             return point;
         }
 
+        [HttpGet("driver/{driverId}")]
+        public async Task<ActionResult<Point>> GetPointFromDriver(int driverId)
+        {
+            //var points = await _context.Points.ToListAsync();
+
+            var point = await _context.Points.Where(i => i.DriverId == driverId).ToListAsync();
+
+            if (point == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(point);
+        }
+
+        [HttpGet("race/{raceId}")]
+        public async Task<ActionResult<Point>> GetPointFromRace(int raceId)
+        {
+            //var points = await _context.Points.ToListAsync();
+
+            var point = await _context.Points.Where(i => i.RaceId == raceId).ToListAsync();
+
+            if (point == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(point);
+        }
+
         // PUT: api/Points/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPoint(int id, Point point)
+        [HttpPut("{driverId}/{raceId}")]
+        public async Task<IActionResult> PutPoint(int driverId, int raceId, Point point)
         {
-            if (id != point.DriverId)
+            if (driverId != point.DriverId || raceId != point.RaceId)
             {
                 return BadRequest();
+            }
+
+            if(PositionOccupied(point.RaceId, point.Position))
+            {
+                return Conflict("There is already an entry in this position in this race");
             }
 
             _context.Entry(point).State = EntityState.Modified;
@@ -61,7 +96,7 @@ namespace F1Website.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PointExists(id))
+                if (!PointExists(driverId, raceId))
                 {
                     return NotFound();
                 }
@@ -79,6 +114,11 @@ namespace F1Website.Controllers
         [HttpPost]
         public async Task<ActionResult<Point>> PostPoint(Point point)
         {
+            if (PositionOccupied(point.RaceId, point.Position))
+            {
+                return Conflict("There is already a racer in that position");
+            }
+
             _context.Points.Add(point);
             try
             {
@@ -86,7 +126,7 @@ namespace F1Website.Controllers
             }
             catch (DbUpdateException)
             {
-                if (PointExists(point.DriverId))
+                if (PointExists(point.DriverId, point.RaceId))
                 {
                     return Conflict();
                 }
@@ -96,14 +136,15 @@ namespace F1Website.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPoint", new { id = point.DriverId }, point);
+            return CreatedAtAction("GetPoint", new { driverId = point.DriverId, raceId = point.RaceId }, point);
         }
 
         // DELETE: api/Points/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePoint(int id)
+        [HttpDelete("{driverId}/{raceId}")]
+        public async Task<IActionResult> DeletePoint(int driverId, int raceId)
         {
-            var point = await _context.Points.FindAsync(id);
+            //var point = await _context.Points.FindAsync(id);
+            var point = await _context.Points.FirstOrDefaultAsync(i => i.DriverId == driverId && i.RaceId == raceId);
             if (point == null)
             {
                 return NotFound();
@@ -115,9 +156,14 @@ namespace F1Website.Controllers
             return NoContent();
         }
 
-        private bool PointExists(int id)
+        private bool PointExists(int driverId, int raceId)
         {
-            return _context.Points.Any(e => e.DriverId == id);
+            return _context.Points.Any(e => e.DriverId == driverId && e.RaceId == raceId);
+        }
+
+        private bool PositionOccupied(int raceId, int? position)
+        {
+            return _context.Points.Any(e => e.RaceId == raceId && e.Position == position);
         }
     }
 }

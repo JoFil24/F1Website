@@ -88,6 +88,20 @@ namespace F1Website.Controllers
                 return NotFound();
             }
 
+            var races = await _context.Races.Where(i => i.TrackId == id).ToListAsync();
+
+            foreach(var race in races)
+            {
+                var points = await _context.Points.Where(i => i.RaceId == race.Id).ToListAsync();
+
+                foreach(var point in points)
+                {
+                    _context.Points.Remove(point);
+                }
+
+                _context.Races.Remove(race);
+            }
+
             _context.Tracks.Remove(track);
             await _context.SaveChangesAsync();
 

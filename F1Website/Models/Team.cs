@@ -6,7 +6,6 @@ namespace F1Website.Models;
 
 public partial class Team
 {
-    [JsonIgnore]
     public int Id { get; set; }
 
     public string Name { get; set; } = null!;

@@ -93,6 +93,13 @@ namespace F1Website.Controllers
                 return NotFound();
             }
 
+            var points = await _context.Points.Where(i => i.RaceId == id).ToListAsync();
+
+            foreach(var point in points)
+            {
+                _context.Points.Remove(point);
+            }
+
             _context.Races.Remove(race);
             await _context.SaveChangesAsync();
 

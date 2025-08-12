@@ -43,15 +43,43 @@ namespace F1Website.Controllers
             return driverTeam;
         }
 
-        // PUT: api/DriverTeams/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutDriverTeam(int id, DriverTeam driverTeam)
+        [HttpGet("driver/{driverId}")]
+        public async Task<ActionResult<DriverTeam>> GetDriverTeamFromDriver(int driverId)
         {
-            if (id != driverTeam.DriverId)
+            var driverTeams = await _context.DriverTeams.Where(i => i.DriverId == driverId).ToListAsync();
+
+            if(driverTeams == null)
             {
                 return BadRequest();
             }
+
+            return Ok(driverTeams);
+        }
+
+        [HttpGet("team/{teamId}")]
+        public async Task<ActionResult<DriverTeam>> GetDriverTeamFromTeam(int teamId)
+        {
+            var driverTeams = await _context.DriverTeams.Where(i => i.TeamId == teamId).ToListAsync();
+
+            if (driverTeams == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(driverTeams);
+        }
+
+        // PUT: api/DriverTeams/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut("{driverId}/{teamId}")]
+        public async Task<IActionResult> PutDriverTeam(int driverId, int teamId, DriverTeam driverTeam)
+        {
+            if (driverId != driverTeam.DriverId || teamId != driverTeam.TeamId)
+            {
+                return BadRequest();
+            }
+
+            //asdfgdgsds
 
             _context.Entry(driverTeam).State = EntityState.Modified;
 
@@ -61,7 +89,7 @@ namespace F1Website.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!DriverTeamExists(id))
+                if (!DriverTeamExists(driverId, teamId))
                 {
                     return NotFound();
                 }
@@ -86,7 +114,7 @@ namespace F1Website.Controllers
             }
             catch (DbUpdateException)
             {
-                if (DriverTeamExists(driverTeam.DriverId))
+                if (DriverTeamExists(driverTeam.DriverId, driverTeam.TeamId))
                 {
                     return Conflict();
                 }
@@ -96,14 +124,16 @@ namespace F1Website.Controllers
                 }
             }
 
-            return CreatedAtAction("GetDriverTeam", new { id = driverTeam.DriverId }, driverTeam);
+            return CreatedAtAction("GetDriverTeam", new { driverId = driverTeam.DriverId, teamId = driverTeam.TeamId }, driverTeam);
         }
 
         // DELETE: api/DriverTeams/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteDriverTeam(int id)
+        [HttpDelete("{driverId}/{teamId}")]
+        public async Task<IActionResult> DeleteDriverTeam(int driverId, int teamId)
         {
-            var driverTeam = await _context.DriverTeams.FindAsync(id);
+            //var driverTeam = await _context.DriverTeams.FindAsync(id);
+
+            var driverTeam = await _context.DriverTeams.FirstOrDefaultAsync(i => i.DriverId == driverId && i.TeamId == teamId);
             if (driverTeam == null)
             {
                 return NotFound();
@@ -115,9 +145,9 @@ namespace F1Website.Controllers
             return NoContent();
         }
 
-        private bool DriverTeamExists(int id)
+        private bool DriverTeamExists(int driverId, int teamId)
         {
-            return _context.DriverTeams.Any(e => e.DriverId == id);
+            return _context.DriverTeams.Any(e => e.DriverId == driverId && e.TeamId == teamId);
         }
     }
 }
