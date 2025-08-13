@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.Json.Serialization;
 
 namespace F1Website.Models;
@@ -11,6 +12,8 @@ public partial class Driver
     public string Name { get; set; } = null!;
 
     public string Country { get; set; } = null!;
+
+    public bool IsVisible { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<DriverTeam> DriverTeams { get; set; } = new List<DriverTeam>();

@@ -19,6 +19,12 @@ namespace F1Website.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Track>>> GetTracks()
         {
+            return await _context.Tracks.Where(i => i.IsVisible).ToListAsync();
+        }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<Track>>> GetAllTracks()
+        {
             return await _context.Tracks.ToListAsync();
         }
 
@@ -28,7 +34,7 @@ namespace F1Website.Controllers
         {
             var track = await _context.Tracks.FindAsync(id);
 
-            if (track == null)
+            if (track == null || !track.IsVisible)
             {
                 return NotFound();
             }
@@ -41,7 +47,7 @@ namespace F1Website.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTrack(int id, Track track)
         {
-            if (id != track.Id)
+            if (id != track.Id || !track.IsVisible)
             {
                 return BadRequest();
             }
@@ -72,6 +78,7 @@ namespace F1Website.Controllers
         [HttpPost]
         public async Task<ActionResult<Track>> PostTrack(Track track)
         {
+            track.IsVisible = true;
             _context.Tracks.Add(track);
             await _context.SaveChangesAsync();
 
@@ -88,21 +95,8 @@ namespace F1Website.Controllers
                 return NotFound();
             }
 
-            var races = await _context.Races.Where(i => i.TrackId == id).ToListAsync();
-
-            foreach(var race in races)
-            {
-                var points = await _context.Points.Where(i => i.RaceId == race.Id).ToListAsync();
-
-                foreach(var point in points)
-                {
-                    _context.Points.Remove(point);
-                }
-
-                _context.Races.Remove(race);
-            }
-
-            _context.Tracks.Remove(track);
+            track.IsVisible = false;
+            //_context.Tracks.Remove(track);
             await _context.SaveChangesAsync();
 
             return NoContent();

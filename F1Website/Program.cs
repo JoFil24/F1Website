@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMvc();
-var connectionString = "Server=DESKTOP-8A567JE\\SQLEXPRESS01;Database=F1;Trusted_Connection=True;TrustServerCertificate=True";
+var connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=F1; User ID=F1User;Password=P@ssw0rd;";
 
 builder.Services.AddDbContext<F1Context>(options =>
     options.UseSqlServer(connectionString));

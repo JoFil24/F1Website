@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace F1Website.Models;
 
 public partial class Race
-{ 
+{
     public int Id { get; set; }
 
     public DateTime RaceDate { get; set; }
@@ -13,6 +13,8 @@ public partial class Race
     public int? Laps { get; set; }
 
     public int TrackId { get; set; }
+
+    public bool IsVisible { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Point> Points { get; set; } = new List<Point>();

@@ -24,6 +24,12 @@ namespace F1Website.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
         {
+            return await _context.Teams.Where(i => i.IsVisible).ToListAsync();
+        }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<Team>>> GetAllTeams()
+        {
             return await _context.Teams.ToListAsync();
         }
 
@@ -33,7 +39,7 @@ namespace F1Website.Controllers
         {
             var team = await _context.Teams.FindAsync(id);
 
-            if (team == null)
+            if (team == null || !team.IsVisible)
             {
                 return NotFound();
             }
@@ -46,7 +52,7 @@ namespace F1Website.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTeam(int id, Team team)
         {
-            if (id != team.Id)
+            if (id != team.Id || !team.IsVisible)
             {
                 return BadRequest();
             }
@@ -77,6 +83,7 @@ namespace F1Website.Controllers
         [HttpPost]
         public async Task<ActionResult<Team>> PostTeam(Team team)
         {
+            team.IsVisible = true;
             _context.Teams.Add(team);
             await _context.SaveChangesAsync();
 
@@ -93,14 +100,8 @@ namespace F1Website.Controllers
                 return NotFound();
             }
 
-            var driverTeams = await _context.DriverTeams.Where(i => i.TeamId == id).ToListAsync();
-
-            foreach (var driverTeam in driverTeams)
-            {
-                _context.DriverTeams.Remove(driverTeam);
-            }
-
-            _context.Teams.Remove(team);
+            team.IsVisible = false;
+            //_context.Teams.Remove(team);
             await _context.SaveChangesAsync();
 
             return NoContent();

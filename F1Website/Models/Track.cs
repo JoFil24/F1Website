@@ -14,6 +14,8 @@ public partial class Track
 
     public double Length { get; set; }
 
+    public bool IsVisible { get; set; }
+
     [JsonIgnore]
     public virtual ICollection<Race> Races { get; set; } = new List<Race>();
 }

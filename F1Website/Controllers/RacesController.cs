@@ -24,6 +24,13 @@ namespace F1Website.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Race>>> GetRaces()
         {
+            return await _context.Races.Where(i => i.IsVisible).ToListAsync();
+        }
+
+        // GET: api/Races
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<Race>>> GetAllRaces()
+        {
             return await _context.Races.ToListAsync();
         }
 
@@ -33,7 +40,7 @@ namespace F1Website.Controllers
         {
             var race = await _context.Races.FindAsync(id);
 
-            if (race == null)
+            if (race == null || !race.IsVisible)
             {
                 return NotFound();
             }
@@ -46,7 +53,7 @@ namespace F1Website.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutRace(int id, Race race)
         {
-            if (id != race.Id)
+            if (id != race.Id || !race.IsVisible)
             {
                 return BadRequest();
             }
@@ -77,6 +84,7 @@ namespace F1Website.Controllers
         [HttpPost]
         public async Task<ActionResult<Race>> PostRace(Race race)
         {
+            race.IsVisible = true;
             _context.Races.Add(race);
             await _context.SaveChangesAsync();
 
@@ -93,14 +101,9 @@ namespace F1Website.Controllers
                 return NotFound();
             }
 
-            var points = await _context.Points.Where(i => i.RaceId == id).ToListAsync();
+            race.IsVisible = false;
 
-            foreach(var point in points)
-            {
-                _context.Points.Remove(point);
-            }
-
-            _context.Races.Remove(race);
+            //_context.Races.Remove(race);
             await _context.SaveChangesAsync();
 
             return NoContent();

@@ -12,6 +12,8 @@ public partial class Team
 
     public string Engine { get; set; } = null!;
 
+    public bool IsVisible { get; set; }
+
     [JsonIgnore]
     public virtual ICollection<DriverTeam> DriverTeams { get; set; } = new List<DriverTeam>();
 }

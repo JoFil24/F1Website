@@ -24,6 +24,12 @@ namespace F1Website.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Driver>>> GetDrivers()
         {
+            return await _context.Drivers.Where(i => i.IsVisible).ToListAsync();
+        }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<Driver>>> GetAllDrivers()
+        {
             return await _context.Drivers.ToListAsync();
         }
 
@@ -33,7 +39,7 @@ namespace F1Website.Controllers
         {
             var driver = await _context.Drivers.FindAsync(id);
 
-            if (driver == null)
+            if (driver == null || !driver.IsVisible)
             {
                 return NotFound();
             }
@@ -46,7 +52,7 @@ namespace F1Website.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDriver(int id, Driver driver)
         {
-            if (id != driver.Id)
+            if (id != driver.Id || !driver.IsVisible)
             {
                 return BadRequest();
             }
@@ -94,20 +100,9 @@ namespace F1Website.Controllers
                 return NotFound();
             }
 
-            var points = await _context.Points.Where(i => i.DriverId == id).ToListAsync();
-            var driverTeams = await _context.DriverTeams.Where(i => i.DriverId == id).ToListAsync();
+            driver.IsVisible = false;
 
-            foreach (var point in points)
-            {
-                _context.Points.Remove(point);
-            }
-
-            foreach (var driverTeam in driverTeams)
-            {
-                _context.DriverTeams.Remove(driverTeam);
-            }
-
-            _context.Drivers.Remove(driver);
+            //_context.Drivers.Update(driver);
             await _context.SaveChangesAsync();
 
             return NoContent();
