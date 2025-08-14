@@ -1,7 +1,19 @@
 using F1Website.Models;
 using Microsoft.EntityFrameworkCore;
 
+var MyAllowSpecificOrigins = "_MyAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
+
+//CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("*");
+        });
+});
 
 // Add services to the container.
 
@@ -28,6 +40,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 

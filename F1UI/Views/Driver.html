@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Driver Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<style>
+    .lmao {
+        /*
+        font-size: 20px;*/
+
+        display: inline-block;
+        white-space: pre;
+        border: 2px black solid;
+    }
+    .div-style{
+        display: block;
+        padding: 5px;
+        border: 1px solid red;
+        width: 600px;
+    }
+</style>
+
+<body>
+    <button onclick="GetDrivers()">Get All Visible Drivers </button>
+    <br />
+    <div class="div-style" id="output">
+    </div>
+
+    <script>
+
+
+        function GetDrivers() {
+            $.ajax({
+                url: 'https://localhost:7253/api/Drivers',
+                method: 'GET',
+                success: function (data) {
+                    debugger;
+                    var driversJSON= JSON.stringify(data, null, 2);
+
+                    var drivers = JSON.parse(driversJSON);
+
+                    Object.keys(drivers).forEach(function (key) {
+                        $('#output').append(`<p class='lmao' id=${drivers[key]['id']}></p>`);
+                        $(`#${drivers[key]['id']}`).append(JSON.stringify(drivers[key], null, 2));
+                    });
+                },
+                error: function (xhr, status, error) {
+                    debugger;
+                    $('#output').text('Error: ' + error);
+                }
+            });
+        }
+    </script>
+
+
+</body>
+</html>
