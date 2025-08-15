@@ -4,13 +4,14 @@
     <meta charset="utf-8" />
     <title>Driver Page</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <style>
     .lmao {
-        /*
-        font-size: 20px;*/
-
         display: inline-block;
         white-space: pre;
         border: 2px black solid;
@@ -18,33 +19,47 @@
     .div-style{
         display: block;
         padding: 5px;
-        border: 1px solid red;
         width: 600px;
+    }
+
+    #driverTable, th, td {
+        
     }
 </style>
 
-<body>
-    <button onclick="GetDrivers()">Get All Visible Drivers </button>
-    <br />
-    <div class="div-style" id="output">
+<body onload="GetDrivers()">
+    <!--<button onclick="GetDrivers()">Get All Visible Drivers </button>-->
+    <!-- <br />-->
+    <div class="div-style container" id="output">
+        <table class="table table-hover" id="driverTable">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Country</th>
+            </tr>
+        </table>
     </div>
 
     <script>
-
 
         function GetDrivers() {
             $.ajax({
                 url: 'https://localhost:7253/api/Drivers',
                 method: 'GET',
                 success: function (data) {
-                    debugger;
-                    var driversJSON= JSON.stringify(data, null, 2);
+                    //debugger;
+                    var driversJSON = JSON.stringify(data, null, 2);
 
                     var drivers = JSON.parse(driversJSON);
 
-                    Object.keys(drivers).forEach(function (key) {
-                        $('#output').append(`<p class='lmao' id=${drivers[key]['id']}></p>`);
-                        $(`#${drivers[key]['id']}`).append(JSON.stringify(drivers[key], null, 2));
+                    Object.keys(drivers).forEach(function (entry) {
+                        $('#driverTable').append(`<tr id=${drivers[entry]['id']}>`);
+
+                        for (const [key, value] of Object.entries(drivers[entry])) {
+                            $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry][key]}`);
+                        }
+
+                        $('#driverTable').append('</tr>');
                     });
                 },
                 error: function (xhr, status, error) {

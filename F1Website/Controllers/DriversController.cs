@@ -9,6 +9,13 @@ using F1Website.Models;
 
 namespace F1Website.Controllers
 {
+    public class DriverDto
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Country { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class DriversController : ControllerBase
@@ -22,9 +29,10 @@ namespace F1Website.Controllers
 
         // GET: api/Drivers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Driver>>> GetDrivers()
+        public async Task<ActionResult<IEnumerable<DriverDto>>> GetDrivers()
         {
-            return await _context.Drivers.Where(i => i.IsVisible).ToListAsync();
+            //return await _context.Drivers.Where(i => i.IsVisible).ToListAsync();
+            return await _context.Drivers.Where(i => i.IsVisible).Select(d => new DriverDto { Id = d.Id, Name = d.Name, Country = d.Country }).ToListAsync();
         }
 
         [HttpGet("all")]
