@@ -11,7 +11,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
         policy =>
         {
-            policy.WithOrigins("*");
+            policy.WithOrigins("*")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
         });
 });
 
@@ -44,6 +46,9 @@ app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.MapControllers();
 

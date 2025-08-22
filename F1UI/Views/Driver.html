@@ -28,17 +28,34 @@
 </style>
 
 <body onload="GetDrivers()">
-    <!--<button onclick="GetDrivers()">Get All Visible Drivers </button>-->
-    <!-- <br />-->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="Index.html">Home</a></li>
+                <li class="active"><a href="Driver.html">Drivers</a></li>
+                <li><a href="#">Page 2</a></li>
+                <li><a href="#">Page 3</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="div-style container" id="output">
+        <a href="CreateDriver.html">Add New Driver</a>
         <table class="table table-hover" id="driverTable">
             <tr>
                 <th>ID</th>
                 <th>Name</th>
                 <th>Country</th>
+                <th></th>
+                <th></th>
             </tr>
         </table>
     </div>
+
+    <a onclick=""></a>
 
     <script>
 
@@ -47,7 +64,7 @@
                 url: 'https://localhost:7253/api/Drivers',
                 method: 'GET',
                 success: function (data) {
-                    //debugger;
+                    debugger;
                     var driversJSON = JSON.stringify(data, null, 2);
 
                     var drivers = JSON.parse(driversJSON);
@@ -58,6 +75,9 @@
                         for (const [key, value] of Object.entries(drivers[entry])) {
                             $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry][key]}`);
                         }
+
+                        $(`#${drivers[entry]['id']}`).append(`<td><a href='#'>Update</a></td>`)
+                        $(`#${drivers[entry]['id']}`).append(`<td><a href='#'>Remove</a></td>`)
 
                         $('#driverTable').append('</tr>');
                     });

@@ -1,0 +1,97 @@
+﻿<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Driver Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<style>
+    .lmao {
+        display: inline-block;
+        white-space: pre;
+        border: 2px black solid;
+    }
+
+    .div-style {
+        display: block;
+        padding: 5px;
+        width: 600px;
+    }
+
+    #driverTable, th, td {
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="Index.html">Home</a></li>
+                <li class="active"><a href="Driver.html">Drivers</a></li>
+                <li><a href="#">Page 2</a></li>
+                <li><a href="#">Page 3</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <h2>Update Driver</h2>
+    <table>
+        <tr>
+            <td><label id="Name">Name: </label></td>
+            <td><input id="NameInput" /></td>
+        </tr>
+        <tr>
+            <td><label id="Country">Country: </label></td>
+            <td><input id="CountryInput" /></td>
+        </tr>
+    </table>
+
+    <button onclick="loadJsonData()">Input data</button>
+
+    <script>
+        function DefaultValues() {
+
+        }
+
+        function loadJsonData() {
+            debugger;
+
+            var postdata = JSON.stringify(
+                {
+                    "name": document.getElementById("NameInput").value,
+                    "country": document.getElementById("CountryInput").value,
+                    "isVisible": true
+                });
+            try {
+                $.ajax({
+                    url: 'https://localhost:7253/api/Drivers',
+                    type: 'POST',
+                    data: postdata,
+                    contentType: 'application/json',
+                    //dataType: 'json',
+                    success: getSuccess,
+                    error: getFail
+                });
+            } catch (e) {
+                debugger;
+                alert(e);
+            }
+            function getSuccess(data, textStatus, jqXHR) {
+                debugger;
+                alert(`Created driver with ID: ${data.id}`);
+            };
+            function getFail(jqXHR, textStatus, errorThrown) {
+                debugger;
+                alert(jqXHR.status);
+            };
+        };
+    </script>
+</body>
+</html>
