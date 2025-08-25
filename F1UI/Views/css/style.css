@@ -1,0 +1,11 @@
+﻿.lmao {
+    display: inline-block;
+    white-space: pre;
+    border: 2px black solid;
+}
+
+.div-style {
+    display: block;
+    padding: 5px;
+    width: 600px;
+}

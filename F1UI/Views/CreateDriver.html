@@ -7,24 +7,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
 </head>
-
-<style>
-    .lmao {
-        display: inline-block;
-        white-space: pre;
-        border: 2px black solid;
-    }
-    .div-style{
-        display: block;
-        padding: 5px;
-        width: 600px;
-    }
-
-    #driverTable, th, td {
-        
-    }
-</style>
 
 <body>
     <nav class="navbar navbar-default">
@@ -53,41 +38,9 @@
         </tr>
     </table>
 
-    <button onclick="loadJsonData()">Input data</button>
+    <button onclick="loadJsonDriverData('POST')">Input data</button>
 
-    <script>
-        function loadJsonData() {
-            debugger;
-
-            var postdata = JSON.stringify(
-                {
-                    "name": document.getElementById("NameInput").value,
-                    "country": document.getElementById("CountryInput").value,
-                    "isVisible": true
-                });
-            try {
-                $.ajax({
-                    url: 'https://localhost:7253/api/Drivers',
-                    type: 'POST',
-                    data: postdata,
-                    contentType: 'application/json',
-                    //dataType: 'json',
-                    success: getSuccess,
-                    error: getFail
-                });
-            } catch (e) {
-                debugger;
-                alert(e);
-            }
-            function getSuccess(data, textStatus, jqXHR) {
-                debugger;
-                alert(`Created driver with ID: ${data.id}`);
-            };
-            function getFail(jqXHR, textStatus, errorThrown) {
-                debugger;
-                alert(jqXHR.status);
-            };
-        };
+    <script src="js/Script.js">
     </script>
 </body>
 </html>

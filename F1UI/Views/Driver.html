@@ -8,24 +8,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
 </head>
-
-<style>
-    .lmao {
-        display: inline-block;
-        white-space: pre;
-        border: 2px black solid;
-    }
-    .div-style{
-        display: block;
-        padding: 5px;
-        width: 600px;
-    }
-
-    #driverTable, th, td {
-        
-    }
-</style>
 
 <body onload="GetDrivers()">
     <nav class="navbar navbar-default">
@@ -57,37 +42,7 @@
 
     <a onclick=""></a>
 
-    <script>
-
-        function GetDrivers() {
-            $.ajax({
-                url: 'https://localhost:7253/api/Drivers',
-                method: 'GET',
-                success: function (data) {
-                    debugger;
-                    var driversJSON = JSON.stringify(data, null, 2);
-
-                    var drivers = JSON.parse(driversJSON);
-
-                    Object.keys(drivers).forEach(function (entry) {
-                        $('#driverTable').append(`<tr id=${drivers[entry]['id']}>`);
-
-                        for (const [key, value] of Object.entries(drivers[entry])) {
-                            $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry][key]}`);
-                        }
-
-                        $(`#${drivers[entry]['id']}`).append(`<td><a href='#'>Update</a></td>`)
-                        $(`#${drivers[entry]['id']}`).append(`<td><a href='#'>Remove</a></td>`)
-
-                        $('#driverTable').append('</tr>');
-                    });
-                },
-                error: function (xhr, status, error) {
-                    debugger;
-                    $('#output').text('Error: ' + error);
-                }
-            });
-        }
+    <script src="js/Script.js">
     </script>
 
 
