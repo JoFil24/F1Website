@@ -24,7 +24,7 @@ function GetDrivers() {
                 }
 
                 $(`#${drivers[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("UpdateDriver.html?id=", ${drivers[entry]['id']})'>Update</a></td>`)
-                $(`#${drivers[entry]['id']}`).append(`<td><a onclick='DeleteData(${drivers[entry]['id']})'>Remove</a></td>`)
+                $(`#${drivers[entry]['id']}`).append(`<td><a onclick='DeleteDriver(${drivers[entry]['id']})'>Remove</a></td>`)
 
                 $('#driverTable').append('</tr>');
             });
@@ -36,7 +36,36 @@ function GetDrivers() {
     });
 }
 
-function DeleteData(id) {
+function GetTeams() {
+    $.ajax({
+        url: 'https://localhost:7253/api/Teams',
+        method: 'GET',
+        success: function (data) {
+            debugger;
+            var teamsJSON = JSON.stringify(data, null, 2);
+
+            var teams = JSON.parse(teamsJSON);
+
+            Object.keys(teams).forEach(function (entry) {
+                $('#teamTable').append(`<tr id=${teams[entry]['id']}>`);
+
+                for (const [key, value] of Object.entries(teams[entry])) {
+                    $(`#${teams[entry]['id']}`).append(`<td>${teams[entry][key]}`);
+                }
+
+                $(`#${teams[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("UpdateTeam.html?id=", ${teams[entry]['id']})'>Update</a></td>`)
+                $(`#${teams[entry]['id']}`).append(`<td><a onclick='DeleteTeam(${teams[entry]['id']})'>Remove</a></td>`)
+
+                $('#teamTable').append('</tr>');
+            });
+        },
+        error: function (xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    });
+}
+function DeleteDriver(id) {
     if (confirm("Are you sure you want to delete the driver with ID: " + id)) {
         try {
             $.ajax({

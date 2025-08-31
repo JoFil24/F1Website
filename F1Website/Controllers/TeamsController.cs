@@ -9,6 +9,13 @@ using F1Website.Models;
 
 namespace F1Website.Controllers
 {
+    public class TeamDto
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Engine { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class TeamsController : ControllerBase
@@ -22,9 +29,9 @@ namespace F1Website.Controllers
 
         // GET: api/Teams
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Team>>> GetTeams()
+        public async Task<ActionResult<IEnumerable<TeamDto>>> GetTeams()
         {
-            return await _context.Teams.Where(i => i.IsVisible).ToListAsync();
+            return await _context.Teams.Where(i => i.IsVisible).Select(d => new TeamDto { Id = d.Id, Name = d.Name, Engine = d.Engine }).ToListAsync();
         }
 
         [HttpGet("all")]
