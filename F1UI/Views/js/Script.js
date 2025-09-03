@@ -90,6 +90,31 @@ function DeleteDriver(id) {
     }
 }
 
+function DeleteTeam(id) {
+    if (confirm("Are you sure you want to delete the team with ID: " + id)) {
+        try {
+            $.ajax({
+                url: `https://localhost:7253/api/Teams/${id}`,
+                type: 'DELETE',
+                success: getSuccess,
+                error: getFail
+            });
+        }
+        catch (e) {
+            alert(e);
+        }
+        function getSuccess(data, textStatus, jqXHR) {
+            debugger;
+            alert(`Delete team with ID ` + id);
+            redirectMainPage("Team.html");
+        };
+        function getFail(jqXHR, textStatus, errorThrown) {
+            debugger;
+            alert(jqXHR.status);
+        };
+    }
+}
+
 //function loadJsonData() {
 //    debugger;
 
@@ -123,27 +148,80 @@ function DeleteDriver(id) {
 //    };
 //};
 
-function getOneDriver(id) {
+function getOneEntry(table, id) {
     return $.ajax({
-        url: `https://localhost:7253/api/Drivers/${id}`,
+        url: `https://localhost:7253/api/${table}/${id}`,
         method: 'GET'
     });
 }
 
 //for creating or updating a driver
-function loadJsonDriverData(method, id = null) {
-    debugger; 
+function loadJsonData(table, method, id = null) {
+    debugger;
+
+    var entity; //used for success message
+    var html; //html for redirect
+
+    switch (table.toUpperCase()) {
+        case "driver".toUpperCase(), "drivers".toUpperCase():
+            table = "Drivers";
+            entity = "driver";
+            html = "Driver.html"
+            break;
+
+        case "team".toUpperCase(), "teams".toUpperCase():
+            table = "Teams";
+            entity = "team";
+            html = "Team.html"
+            break;
+
+        case "driverTeam".toUpperCase(), "driverTeams".toUpperCase():
+            table = "DriverTeams";
+            entity = "driver-team pairing";
+            html = "DriverTeam.html"
+            break;
+
+        case "point".toUpperCase(), "points".toUpperCase():
+            table = "Points";
+            entity = "points scoring";
+            html = "Points.html"
+            break;
+
+        case "race".toUpperCase(), "races".toUpperCase():
+            table = "Races";
+            entity = "race";
+            html = "Race.html"
+            break;
+
+        case "track".toUpperCase(), "tracks".toUpperCase():
+            table = "Tracks";
+            entity = "track";
+            html = "Track.html"
+            break;
+
+        default:
+            alert(`There is no table called ${table}`);
+            return;
+    }
 
     method = method.toUpperCase();
 
-    var postdataObj = {
-        "name": document.getElementById("NameInput").value,
-        "country": document.getElementById("CountryInput").value,
-        "isVisible": true
+    if (table === "Drivers" || table === "Teams") {
+        var postdataObj = {
+            "name": document.getElementById("NameInput").value,
+            "isVisible": true
+        }
+
+        if (table === "Drivers") {
+            postdataObj['country'] = document.getElementById("CountryInput").value;
+        }
+        else if (table === "Teams") {
+            postdataObj['engine'] = document.getElementById("EngineInput").value;
+        }
     }
 
     if (method === 'POST') {
-        var url = 'https://localhost:7253/api/Drivers';
+        var url = `https://localhost:7253/api/${table}`;
     }
     else if (method === 'PUT') {
         if (!id) {
@@ -151,7 +229,7 @@ function loadJsonDriverData(method, id = null) {
             return;
         }
 
-        var url = `https://localhost:7253/api/Drivers/${id}`;
+        var url = `https://localhost:7253/api/${table}/${id}`;
 
         postdataObj['id'] = id;
     }
@@ -175,16 +253,18 @@ function loadJsonDriverData(method, id = null) {
         debugger;
         alert(e);
     }
+
+
     function getSuccess(data, textStatus, jqXHR) {
         debugger;
         if (data) {
-            alert(`Created driver with ID: ${data.id}`);
+            alert(`Created ${entity} with ID: ${data.id}`);
         }
         else {
-            alert("Updated driver");
+            alert(`Updated ${entity}`);
         }
 
-        redirectMainPage("Driver.html");
+        redirectMainPage(html);
     };
     function getFail(jqXHR, textStatus, errorThrown) {
         debugger;
@@ -202,16 +282,27 @@ function getId() {
 
 //when on the update page
 //fill in the boxes with the existing info
-function defaultValues() {
+function defaultValues(table) {
     debugger;
+    //from which table is the entity
 
     var id = getId();
 
-    getOneDriver(id)
-        .done(function (driverData) {
+    getOneEntry(table, id)
+        .done(function (data) {
             debugger;
-            $('#NameInput').val(driverData.name);
-            $('#CountryInput').val(driverData.country);
+
+            switch (table.toUpperCase()) {
+                case 'DRIVER', 'DRIVERS':
+                    $('#NameInput').val(data.name);
+                    $('#CountryInput').val(data.country);
+                    break;
+
+                case 'TEAM', 'TEAMS':
+                    $('#NameInput').val(data.name);
+                    $('#EngineInput').val(data.engine);
+                    break;
+            }
         })
         .fail(function (xhr, status, error) {
             $('#output').text('Error: ' + error);
