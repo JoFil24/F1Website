@@ -9,6 +9,14 @@ using F1Website.Models;
 
 namespace F1Website.Controllers
 {
+    public class DriverTeamNameDto
+    {
+        public int DriverId { get; set; }
+        public int TeamId { get; set; }
+        public string? DriverName { get; set; }
+        public string? TeamName { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class DriverTeamsController : ControllerBase
@@ -25,6 +33,19 @@ namespace F1Website.Controllers
         public async Task<ActionResult<IEnumerable<DriverTeam>>> GetDriverTeams()
         {
             return await _context.DriverTeams.ToListAsync();
+        }
+
+        [HttpGet("Names")]
+        public async Task<ActionResult<IEnumerable<DriverTeamNameDto>>> GetDriverTeamNames()
+        {
+            return await (from DT in _context.DriverTeams
+                          join D in _context.Drivers
+                          on DT.DriverId equals D.Id
+                          join T in _context.Teams
+                          on DT.TeamId equals T.Id
+                          where D.IsVisible == true &&
+                          T.IsVisible == true
+                          select new DriverTeamNameDto { DriverId = DT.DriverId, TeamId = DT.TeamId, DriverName = D.Name, TeamName = T.Name }).ToListAsync();
         }
 
         // GET: api/DriverTeams/5

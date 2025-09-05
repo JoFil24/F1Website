@@ -12,11 +12,38 @@ function GetDrivers() {
         method: 'GET',
         success: function (data) {
             debugger;
-            var driversJSON = JSON.stringify(data, null, 2);
-
-            var drivers = JSON.parse(driversJSON);
+            var drivers = data;
 
             Object.keys(drivers).forEach(function (entry) {
+                $('#driverTable').append(`<tr id=${drivers[entry]['id']}>`);
+
+                for (const [key, value] of Object.entries(drivers[entry])) {
+                    $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry][key]}`);
+                }
+
+                $(`#${drivers[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("UpdateDriver.html?id=", ${drivers[entry]['id']})'>Update</a></td>`)
+                $(`#${drivers[entry]['id']}`).append(`<td><a onclick='DeleteDriver(${drivers[entry]['id']})'>Remove</a></td>`)
+
+                $('#driverTable').append('</tr>');
+            });
+        },
+        error: function (xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    });
+}
+
+function GetDriverTeamPairs() {
+    $.ajax({
+        url: 'https://localhost:7253/api/Drivers/DriverTeamPairs',
+        method: 'GET',
+        success: function (data) {
+            debugger;
+            var drivers = data;
+
+            Object.keys(drivers).forEach(function (entry) {
+                debugger;
                 $('#driverTable').append(`<tr id=${drivers[entry]['id']}>`);
 
                 for (const [key, value] of Object.entries(drivers[entry])) {
@@ -42,9 +69,7 @@ function GetTeams() {
         method: 'GET',
         success: function (data) {
             debugger;
-            var teamsJSON = JSON.stringify(data, null, 2);
-
-            var teams = JSON.parse(teamsJSON);
+            var teams = data;
 
             Object.keys(teams).forEach(function (entry) {
                 $('#teamTable').append(`<tr id=${teams[entry]['id']}>`);
@@ -115,39 +140,6 @@ function DeleteTeam(id) {
     }
 }
 
-//function loadJsonData() {
-//    debugger;
-
-//    var postdata = JSON.stringify(
-//        {
-//            "name": document.getElementById("NameInput").value,
-//            "country": document.getElementById("CountryInput").value,
-//            "isVisible": true
-//        });
-//    try {
-//        $.ajax({
-//            url: 'https://localhost:7253/api/Drivers',
-//            type: 'POST',
-//            data: postdata,
-//            contentType: 'application/json',
-//            //dataType: 'json',
-//            success: getSuccess,
-//            error: getFail
-//        });
-//    } catch (e) {
-//        debugger;
-//        alert(e);
-//    }
-//    function getSuccess(data, textStatus, jqXHR) {
-//        debugger;
-//        alert(`Created driver with ID: ${data.id}`);
-//    };
-//    function getFail(jqXHR, textStatus, errorThrown) {
-//        debugger;
-//        alert(jqXHR.status);
-//    };
-//};
-
 function getOneEntry(table, id) {
     return $.ajax({
         url: `https://localhost:7253/api/${table}/${id}`,
@@ -178,7 +170,7 @@ function loadJsonData(table, method, id = null) {
         case "driverTeam".toUpperCase(), "driverTeams".toUpperCase():
             table = "DriverTeams";
             entity = "driver-team pairing";
-            html = "DriverTeam.html"
+            html = "Driver.html"
             break;
 
         case "point".toUpperCase(), "points".toUpperCase():
@@ -217,6 +209,27 @@ function loadJsonData(table, method, id = null) {
         }
         else if (table === "Teams") {
             postdataObj['engine'] = document.getElementById("EngineInput").value;
+        }
+    }
+    else if (table == "DriverTeams") {
+        var date = new Date();
+        
+        debugger;
+        //slice(-2) is to get the last 2 digits
+        //after adding 0
+        //if the date is between 1 and 9, last digits would be 01 to 09
+        //for the milisecond, the last 3 digits, same logic
+        var dateString = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + (date.getDate())).slice(-2)
+            + "T" + ('0' + (date.getHours())).slice(-2) + ":" + ('0' + (date.getMinutes())).slice(-2) + ":"
+            + ('0' + (date.getSeconds())).slice(-2) + "." + ('00' + (date.getMilliseconds())).slice(-3);
+
+        debugger;
+        var postdataObj = {
+            "driverId": document.getElementById("driverChoice").value,
+            "teamId": document.getElementById("teamChoice").value,
+            "raceNumber": document.getElementById("RaceNumber").value,
+            "dateFrom": dateString,
+            "dateTo": null
         }
     }
 
@@ -309,49 +322,39 @@ function defaultValues(table) {
         })
 }
 
-//function loadJsonData(id = null) {
-//    debugger;
+function DriverTeamDropdown() {
+    $.ajax({
+        url: `https://localhost:7253/api/Drivers`,
+        method: 'GET',
+        success: function (driverData) {
+            debugger;
+            var drivers = driverData;
 
-//    //var postdata = JSON.stringify(
-//    //    {
-//    //        "name": document.getElementById("NameInput").value,
-//    //        "country": document.getElementById("CountryInput").value,
-//    //        "isVisible": true
-//    //    });
+            //put id as value and name as the displayed value
+            Object.keys(drivers).forEach(function (entry) {
+                $('#driverChoice').append(`<option value=${drivers[entry]['id']}>${drivers[entry]['name']}</option>`);
+            })
 
-//    var postdataObj = {
-//        "name": document.getElementById("NameInput").value,
-//        "country": document.getElementById("CountryInput").value,
-//        "isVisible": true
-//    }
+            $.ajax({
+                url: `https://localhost:7253/api/Teams`,
+                method: 'GET',
+                success: function (teamData) {
+                    debugger;
+                    var teams = teamData;
 
-//    if (id) {
-//        postdataObj['id'] = id;
-//    }
-
-//    var postdata = JSON.stringify(postdataObj);
-
-//    try {
-//        $.ajax({
-//            url: `https://localhost:7253/api/Drivers/${id}`,
-//            type: 'PUT',
-//            data: postdata,
-//            contentType: 'application/json',
-//            //dataType: 'json',
-//            success: getSuccess,
-//            error: getFail
-//        });
-//    } catch (e) {
-//        debugger;
-//        alert(e);
-//    }
-//    function getSuccess(data, textStatus, jqXHR) {
-//        debugger;
-//        alert(`Updated driver`);
-//        myFunc();
-//    };
-//    function getFail(jqXHR, textStatus, errorThrown) {
-//        debugger;
-//        alert(jqXHR.status);
-//    };
-//};
+                    Object.keys(teams).forEach(function (entry) {
+                        $('#teamChoice').append(`<option value=${teams[entry]['id']}>${teams[entry]['name']}</option>`);
+                    })
+                },
+                error: function (xhr, status, error) {
+                    debugger;
+                    $('#output').text('Error: ' + error);
+                }
+            })
+        } ,
+        error: function (xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    })
+}

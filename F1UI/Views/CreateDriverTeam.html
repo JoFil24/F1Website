@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body onload="GetDriverTeamPairs()">
+<body onload="DriverTeamDropdown()">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -27,22 +27,38 @@
         </div>
     </nav>
 
-    <div class="div-style container" id="output">
-        <a href="CreateDriver.html">Add New Driver</a>
-        <a href="CreateDriverTeam.html">Add Driver to Team</a>
-        <table class="table table-hover" id="driverTable">
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Country</th>
-                <th>Race Number</th>
-                <th>Team</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </table>
-    </div>
+    <table>
+        <tr>
+            <td>
+                <label for="drivers">Choose a driver: </label>
+            </td>
+            <td>
+                <select name="drivers" id="driverChoice">
+                    <option selected="selected"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="teams">Choose a team: </label>
+            </td>
+            <td>
+                <select name="teams" id="teamChoice">
+                    <option selected="selected"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="race-number">Choose a race number: </label>
+            </td>
+            <td>
+                <input type="number" id="RaceNumber" name="race-number" required min="1" max="99"/>
+            </td>
+        </tr>
+    </table>
 
+    <button onclick="loadJsonData('DriverTeams', 'POST')">Submit</button>
 
     <script src="js/Script.js">
     </script>

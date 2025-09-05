@@ -16,6 +16,15 @@ namespace F1Website.Controllers
         public string? Country { get; set; }
     }
 
+    public class DriverTeamDto
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Country { get; set; }
+        public int? RaceNumber { get; set; }
+        public string? Team { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class DriversController : ControllerBase
@@ -33,6 +42,20 @@ namespace F1Website.Controllers
         {
             //return await _context.Drivers.Where(i => i.IsVisible).ToListAsync();
             return await _context.Drivers.Where(i => i.IsVisible).Select(d => new DriverDto { Id = d.Id, Name = d.Name, Country = d.Country }).ToListAsync();
+        }
+
+        [HttpGet("DriverTeamPairs")]
+        public async Task<ActionResult<IEnumerable<DriverTeamDto>>> GetDriverTeamPairs()
+        {
+            return await (from D in _context.Drivers
+                          join DT in _context.DriverTeams
+                          on D.Id equals DT.DriverId
+                          join T in _context.Teams
+                          on DT.TeamId equals T.Id
+                          where DT.DateTo == null &&
+                          D.IsVisible == true &&
+                          T.IsVisible == true
+                          select new DriverTeamDto { Id = D.Id, Name = D.Name, Country = D.Country, RaceNumber = DT.RaceNumber, Team = T.Name}).ToListAsync();
         }
 
         [HttpGet("all")]
