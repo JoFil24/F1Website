@@ -19,6 +19,7 @@ namespace F1Website.Controllers
     public class DriverTeamDto
     {
         public int Id { get; set; }
+        public int TeamId { get; set; }
         public string? Name { get; set; }
         public string? Country { get; set; }
         public int? RaceNumber { get; set; }
@@ -55,7 +56,22 @@ namespace F1Website.Controllers
                           where DT.DateTo == null &&
                           D.IsVisible == true &&
                           T.IsVisible == true
-                          select new DriverTeamDto { Id = D.Id, Name = D.Name, Country = D.Country, RaceNumber = DT.RaceNumber, Team = T.Name}).ToListAsync();
+                          select new DriverTeamDto { Id = D.Id, TeamId = T.Id, Name = D.Name, Country = D.Country, RaceNumber = DT.RaceNumber, Team = T.Name}).ToListAsync();
+        }
+
+        [HttpGet("DriverTeamPairs/{id}")]
+        public async Task<ActionResult<IEnumerable<DriverTeamDto>>> GetDriverTeamPair(int id)
+        {
+            return await (from D in _context.Drivers
+                          join DT in _context.DriverTeams
+                          on D.Id equals DT.DriverId
+                          join T in _context.Teams
+                          on DT.TeamId equals T.Id
+                          where DT.DateTo == null &&
+                          D.IsVisible == true &&
+                          T.IsVisible == true &&
+                          D.Id == id
+                          select new DriverTeamDto { Id = D.Id, TeamId = T.Id, Name = D.Name, Country = D.Country, RaceNumber = DT.RaceNumber, Team = T.Name }).ToListAsync();
         }
 
         [HttpGet("all")]

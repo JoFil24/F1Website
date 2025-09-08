@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Driver Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body onload="getOneDriverTeam()">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="Index.html">Home</a></li>
+                <li class="active"><a href="Driver.html">Drivers</a></li>
+                <li><a href="Team.html">Teams</a></li>
+                <li><a href="#">Page 3</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <table id="input">
+        <tr id="Driver">
+            <td><label>Driver: </label></td>
+        </tr>
+        <tr id="Team">
+            <td><label>Team: </label></td>
+        </tr>
+        <tr id="Race-Number">
+            <td><label>Race Number: </label></td>
+        </tr>
+        <tr id="DateFrom">
+            <td><label>Date Started: </label></td>
+        </tr>
+        <tr id="DateTo">
+            <td><label>Date Ended: </label></td>
+        </tr>
+    </table>
+
+    <button onclick="loadJsonData('DriverTeams', 'PUT', getId())">Submit</button>
+
+    <script src="js/Script.js">
+    </script>
+
+
+</body>
+</html>

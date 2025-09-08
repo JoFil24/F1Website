@@ -128,6 +128,13 @@ namespace F1Website.Controllers
         [HttpPost]
         public async Task<ActionResult<DriverTeam>> PostDriverTeam(DriverTeam driverTeam)
         {
+            var DriverList = await _context.DriverTeams.FirstOrDefaultAsync(i => i.DriverId == driverTeam.DriverId && i.DateTo == null);
+
+            if (DriverList is not null)
+            {
+                return Conflict();
+            }
+
             _context.DriverTeams.Add(driverTeam);
             try
             {

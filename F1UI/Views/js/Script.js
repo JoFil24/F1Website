@@ -52,6 +52,7 @@ function GetDriverTeamPairs() {
 
                 $(`#${drivers[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("UpdateDriver.html?id=", ${drivers[entry]['id']})'>Update</a></td>`)
                 $(`#${drivers[entry]['id']}`).append(`<td><a onclick='DeleteDriver(${drivers[entry]['id']})'>Remove</a></td>`)
+                $(`#${drivers[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("UpdateDriverTeam.html?id=", ${drivers[entry]['id']})'>Update Driver Team</a></td>`)
 
                 $('#driverTable').append('</tr>');
             });
@@ -147,6 +148,45 @@ function getOneEntry(table, id) {
     });
 }
 
+//get one entry for tables which do not have a primary key
+function getOneDriverTeam() {
+    var id = getId();
+
+    return $.ajax({
+        url: `https://localhost:7253/api/Drivers/DriverTeamPairs/${id}`,
+        method: 'GET',
+        success: function (driverData) {
+            debugger;
+
+            var driver = driverData[0];
+
+            $('#Driver').append(`<td><p>${driver['name']}</p></td>`);
+            $('#Team').append(`<td><p>${driver['team']}</p></td>`);
+            $('#Race-Number').append(`<td><p>${driver['raceNumber']}</p></td>`);
+
+            $.ajax({
+                url: `https://localhost:7253/api/DriverTeams/${driver['id']}/${driver['teamId']}`,
+                method: 'GET',
+                success: function (data) {
+                    debugger;
+                    var driverTeam = data;
+
+                    $('#DateFrom').append(`<td><p>${driverTeam['dateFrom']}</p></td>`);
+                    //$('#DateFrom').append(`<td><input type="date" value / ></td>`)
+                },
+                error: function (xhr, status, error) {
+                    debugger;
+                    $('#output').text('Error: ' + error);
+                }
+            })
+        },
+        error: function (xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    })
+}
+
 //for creating or updating a driver
 function loadJsonData(table, method, id = null) {
     debugger;
@@ -211,7 +251,7 @@ function loadJsonData(table, method, id = null) {
             postdataObj['engine'] = document.getElementById("EngineInput").value;
         }
     }
-    else if (table == "DriverTeams") {
+    else if (table === "DriverTeams") {
         var date = new Date();
         
         debugger;
