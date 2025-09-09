@@ -38,14 +38,14 @@
             <td><label>Race Number: </label></td>
         </tr>
         <tr id="DateFrom">
-            <td><label>Date Started: </label></td>
+            <td><label>Date Started (month-day-year): </label></td>
         </tr>
         <tr id="DateTo">
-            <td><label>Date Ended: </label></td>
+            <td><label>Date Ended (month-day-year): </label></td>
         </tr>
     </table>
 
-    <button onclick="loadJsonData('DriverTeams', 'PUT', getId())">Submit</button>
+    <button id="submitButton" onclick="loadJsonData('DriverTeams', 'PUT', getId())">Submit</button>
 
     <script src="js/Script.js">
     </script>

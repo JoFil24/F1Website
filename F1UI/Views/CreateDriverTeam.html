@@ -33,7 +33,7 @@
                 <label for="drivers">Choose a driver: </label>
             </td>
             <td>
-                <select name="drivers" id="driverChoice">
+                <select name="drivers" id="driver">
                     <option selected="selected"></option>
                 </select>
             </td>
@@ -43,7 +43,7 @@
                 <label for="teams">Choose a team: </label>
             </td>
             <td>
-                <select name="teams" id="teamChoice">
+                <select name="teams" id="team">
                     <option selected="selected"></option>
                 </select>
             </td>
@@ -56,9 +56,25 @@
                 <input type="number" id="RaceNumber" name="race-number" required min="1" max="99"/>
             </td>
         </tr>
+        <tr>
+            <td>
+                <label for="date-from">Choose a starting date (month-day-year): </label>
+            </td>
+            <td>
+                <input type="date" id='DateFromInput' />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="date-to">Choose an ending date (optional) (month-day-year): </label>
+            </td>
+            <td>
+                <input type="date" id='DateToInput' />
+            </td>
+        </tr>
     </table>
 
-    <button onclick="loadJsonData('DriverTeams', 'POST')">Submit</button>
+    <button id="submitButton" onclick="loadJsonData('DriverTeams', 'POST')">Submit</button>
 
     <script src="js/Script.js">
     </script>

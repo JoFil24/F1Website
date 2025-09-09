@@ -6,6 +6,37 @@ function updatePageRedirect(page, id) {
     window.location.href = page + id;
 }
 
+function getSelectedOptionId(id) {
+    debugger;
+    document.querySelector(`#${id}`).addEventListener('change', function (e) {
+        debugger;   
+        const selectedOptions = e.target.selectedOptions;
+        return selectedOptions[0].id;
+    });
+}
+
+function ResetDate(id) {
+    debugger;
+    var defaultValue = document.getElementById(id).defaultValue;
+    if (defaultValue) {
+        document.getElementById(id).value = defaultValue;
+    }
+    else {
+        $(`#${id}`).val('')
+            .attr('type', 'text')
+            .attr('type', 'date');
+    }
+}
+
+//function dateToISOString(date) {
+//    if (date === "") {
+//        return new Date().toISOString();
+//    }
+//    else {
+//        return new Date(date).toISOString();
+//    }
+//}
+
 function GetDrivers() {
     $.ajax({
         url: 'https://localhost:7253/api/Drivers',
@@ -162,7 +193,7 @@ function getOneDriverTeam() {
 
             $('#Driver').append(`<td><p>${driver['name']}</p></td>`);
             $('#Team').append(`<td><p>${driver['team']}</p></td>`);
-            $('#Race-Number').append(`<td><p>${driver['raceNumber']}</p></td>`);
+            $('#Race-Number').append(`<td><input id="RaceNumber" value=${driver['raceNumber']} / ></td>`);
 
             $.ajax({
                 url: `https://localhost:7253/api/DriverTeams/${driver['id']}/${driver['teamId']}`,
@@ -171,14 +202,29 @@ function getOneDriverTeam() {
                     debugger;
                     var driverTeam = data;
 
-                    $('#DateFrom').append(`<td><p>${driverTeam['dateFrom']}</p></td>`);
-                    //$('#DateFrom').append(`<td><input type="date" value / ></td>`)
+                    //var date = new Date(driverTeam['dateFrom']).toISOString();
+                    var date = new Date(driverTeam['dateFrom']);
+
+                    var year = date.getFullYear();
+                    var month = ("0" + (date.getMonth() + 1)).slice(-2);
+                    var day = ("0" + date.getDate()).slice(-2);
+
+                    var dateValue = year + "-" + month + "-" + day;
+
+                    $('#DateFrom').append(`<td><input type="date" id='DateFromInput' value=${dateValue} / ></td>`);
+                    $('#DateFromInput').val(dateValue);
+                    $('#DateFrom').append(`<button onclick="ResetDate('DateFromInput')">Reset Date</a>`)
+
+                    $('#DateTo').append(`<td><input type="date" id='DateToInput' / ></td>`);
+                    $('#DateTo').append(`<button onclick="ResetDate('DateToInput')">Reset Date</a>`);
                 },
                 error: function (xhr, status, error) {
                     debugger;
                     $('#output').text('Error: ' + error);
                 }
             })
+
+            $('#submitButton').attr('onclick', `loadJsonData('DriverTeams', 'PUT', ${driver['id']}, ${driver['teamId']})`);
         },
         error: function (xhr, status, error) {
             debugger;
@@ -188,7 +234,7 @@ function getOneDriverTeam() {
 }
 
 //for creating or updating a driver
-function loadJsonData(table, method, id = null) {
+function loadJsonData(table, method, id = null, id2 = null) {
     debugger;
 
     var entity; //used for success message
@@ -252,28 +298,40 @@ function loadJsonData(table, method, id = null) {
         }
     }
     else if (table === "DriverTeams") {
-        var date = new Date();
-        
-        debugger;
-        //slice(-2) is to get the last 2 digits
-        //after adding 0
-        //if the date is between 1 and 9, last digits would be 01 to 09
-        //for the milisecond, the last 3 digits, same logic
-        var dateString = date.getFullYear() + "-" + ('0' + (date.getMonth() + 1)).slice(-2) + "-" + ('0' + (date.getDate())).slice(-2)
-            + "T" + ('0' + (date.getHours())).slice(-2) + ":" + ('0' + (date.getMinutes())).slice(-2) + ":"
-            + ('0' + (date.getSeconds())).slice(-2) + "." + ('00' + (date.getMilliseconds())).slice(-3);
-
         debugger;
         var postdataObj = {
-            "driverId": document.getElementById("driverChoice").value,
-            "teamId": document.getElementById("teamChoice").value,
-            "raceNumber": document.getElementById("RaceNumber").value,
-            "dateFrom": dateString,
-            "dateTo": null
+            "raceNumber": $("#RaceNumber").val()
         }
     }
 
     if (method === 'POST') {
+        if (table === "DriverTeams") {
+            debugger;
+
+            postdataObj['driverId'] = document.getElementById('driver').value;
+            postdataObj['teamId'] = document.getElementById('team').value;
+
+            var dateFrom = document.getElementById("DateFromInput").value;
+            var dateTo = document.getElementById("DateToInput").value;
+
+            if (dateFrom === "") {
+                var dateFromString = new Date().toISOString();
+            }
+            else {
+                var dateFromString = new Date(dateFrom).toISOString();
+            }
+
+            if (dateTo === "") {
+                var dateToString = null;
+            }
+            else {
+                var dateToString = new Date(dateTo).toISOString();
+            }
+
+            postdataObj['dateFrom'] = dateFromString;
+            postdataObj['dateTo'] = dateToString;
+        }
+
         var url = `https://localhost:7253/api/${table}`;
     }
     else if (method === 'PUT') {
@@ -282,9 +340,40 @@ function loadJsonData(table, method, id = null) {
             return;
         }
 
-        var url = `https://localhost:7253/api/${table}/${id}`;
+        if (table === "DriverTeams" || table === "Points") {
+            if (!id || !id2) {
+                alert("Both IDs are needed for a PUT operation");
+            }
 
-        postdataObj['id'] = id;
+            if (table === "DriverTeams") {
+                postdataObj['driverId'] = id;
+                postdataObj['teamId'] = id2;
+
+                if (document.getElementById('DateFromInput').value === "") {
+                    var dateFromString = new Date(document.getElementById('DateFromInput').defaultValue).toISOString();
+                }
+                else {
+                    var dateFromString = new Date(document.getElementById('DateFromInput').value).toISOString();
+                }
+
+                if (document.getElementById('DateToInput').value === "") {
+                    var dateToString = null;
+                }
+                else {
+                    var dateToString = new Date(document.getElementById('DateToInput').value).toISOString();
+                }
+
+                postdataObj['dateFrom'] = dateFromString;
+                postdataObj['dateTo'] = dateToString;
+            }
+
+            var url = `https://localhost:7253/api/${table}/${id}/${id2}`;
+        }
+        else {
+            var url = `https://localhost:7253/api/${table}/${id}`;
+
+            postdataObj['id'] = id;
+            }
     }
     else {
         console.log(`${method} is not a valid method, try again`);
@@ -372,7 +461,7 @@ function DriverTeamDropdown() {
 
             //put id as value and name as the displayed value
             Object.keys(drivers).forEach(function (entry) {
-                $('#driverChoice').append(`<option value=${drivers[entry]['id']}>${drivers[entry]['name']}</option>`);
+                $('#driver').append(`<option value=${drivers[entry]['id']}>${drivers[entry]['name']}</option>`);
             })
 
             $.ajax({
@@ -383,7 +472,7 @@ function DriverTeamDropdown() {
                     var teams = teamData;
 
                     Object.keys(teams).forEach(function (entry) {
-                        $('#teamChoice').append(`<option value=${teams[entry]['id']}>${teams[entry]['name']}</option>`);
+                        $('#team').append(`<option value=${teams[entry]['id']}>${teams[entry]['name']}</option>`);
                     })
                 },
                 error: function (xhr, status, error) {
