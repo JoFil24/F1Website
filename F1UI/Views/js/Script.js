@@ -28,15 +28,6 @@ function ResetDate(id) {
     }
 }
 
-//function dateToISOString(date) {
-//    if (date === "") {
-//        return new Date().toISOString();
-//    }
-//    else {
-//        return new Date(date).toISOString();
-//    }
-//}
-
 function GetDrivers() {
     $.ajax({
         url: 'https://localhost:7253/api/Drivers',
@@ -481,6 +472,48 @@ function DriverTeamDropdown() {
                 }
             })
         } ,
+        error: function (xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    })
+}
+
+function GetRaces() {
+    $.ajax({
+        url: `https://localhost:7253/api/Races/RacesWithTracks`,
+        method: 'GET',
+        success: function (data) {
+            debugger;
+            var races = data;
+
+            Object.keys(races).forEach(function (entry) {
+                debugger;
+                $('#raceTable').append(`<tr id=${races[entry]['id']}>`);
+
+                for (const [key, value] of Object.entries(races[entry])) {
+                    if (key.toLowerCase().includes("date")) {
+                        var date = new Date(races[entry][key]);
+                        year = date.getFullYear();
+                        month = date.getMonth();
+                        day = date.getDate();
+
+                        //slice(-2) so it can get the last 2 characters
+                        //ex. if the date is 1, it will print out 01 since it will be 2 characters
+                        //if the date is 11, it will add the 0 to make 011, then get the last 2 characters for 11
+                        var dateString = `${year}-${("0" + (month + 1)).slice(-2)}-${("0" + day).slice(-2)}`
+
+                        $(`#${races[entry]['id']}`).append(`<td>${dateString}</td>`);
+                    }
+                    else {
+                        $(`#${races[entry]['id']}`).append(`<td>${races[entry][key]}</td>`);
+                    }
+                }
+
+                $(`#${races[entry]['id']}`).append(`<td><a onclick=''>Update Race</a></td>`);
+                $(`#${races[entry]['id']}`).append(`<td><a onclick=''>Remove Race</a></td>`);
+            })
+        },
         error: function (xhr, status, error) {
             debugger;
             $('#output').text('Error: ' + error);

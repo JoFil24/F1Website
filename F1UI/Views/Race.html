@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body onload="GetDriverTeamPairs()">
+<body onload="GetRaces()">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -20,24 +20,23 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="Index.html">Home</a></li>
-                <li class="active"><a href="Driver.html">Drivers</a></li>
+                <li><a href="Driver.html">Drivers</a></li>
                 <li><a href="Team.html">Teams</a></li>
-                <li><a href="Race.html">Races</a></li>
+                <li class="active"><a href="Race.html">Races</a></li>
             </ul>
         </div>
     </nav>
 
     <div class="div-style container" id="output">
-        <a href="CreateDriver.html">Add New Driver</a>
-        <a href="CreateDriverTeam.html">Add Driver to Team</a>
-        <table class="table table-hover" id="driverTable">
+        <a href="#">Add new Race</a>
+        <a href="#">Add Driver to Team</a>
+        <table class="table table-hover" id="raceTable">
             <tr>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Country</th>
-                <th>Race Number</th>
-                <th>Team</th>
-                <th></th>
+                <th>Date</th>
+                <th>Number of Laps</th>
+                <th>Track ID</th>
+                <th>Track Name</th>
                 <th></th>
                 <th></th>
             </tr>

@@ -9,6 +9,15 @@ using F1Website.Models;
 
 namespace F1Website.Controllers
 {
+    public class RaceDto
+    {
+        public int Id { get; set; }
+        public DateTime RaceDate { get; set; }
+        public int? Laps { get; set; }
+        public int TrackId { get; set; }
+        public string? TrackName { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class RacesController : ControllerBase
@@ -32,6 +41,19 @@ namespace F1Website.Controllers
         public async Task<ActionResult<IEnumerable<Race>>> GetAllRaces()
         {
             return await _context.Races.ToListAsync();
+        }
+
+        [HttpGet("RacesWithTracks")]
+        public async Task<ActionResult<IEnumerable<RaceDto>>> GetRacesTracks()
+        {
+            //return _context.Races.Where(r => r.IsVisible).Select(r => new RaceDto
+
+            return await (from race in _context.Races
+                          join track in _context.Tracks
+                          on race.TrackId equals track.Id
+                          where race.IsVisible == true
+                          select new RaceDto { Id = race.Id, Laps = race.Laps, RaceDate = race.RaceDate, TrackId = race.TrackId, TrackName = track.Name }).ToListAsync();
+            
         }
 
         // GET: api/Races/5

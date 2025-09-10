@@ -130,9 +130,16 @@ namespace F1Website.Controllers
         {
             var DriverList = await _context.DriverTeams.FirstOrDefaultAsync(i => i.DriverId == driverTeam.DriverId && i.DateTo == null);
 
+            var teamDrivers = await _context.DriverTeams.Where(i => i.TeamId == driverTeam.TeamId && i.DateTo == null).ToListAsync();
+
             if (DriverList is not null)
             {
-                return Conflict();
+                return Conflict(new { message = "The driver is already part of a team" });
+            }
+
+            if (teamDrivers.Count >= 2)
+            {
+                return Conflict(new { message = "The team already has 2 drivers" });
             }
 
             _context.DriverTeams.Add(driverTeam);
