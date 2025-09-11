@@ -56,6 +56,16 @@ namespace F1Website.Controllers
             
         }
 
+        [HttpGet("RacesWithTracks/{id}")]
+        public async Task<ActionResult<IEnumerable<RaceDto>>> GetRaceTrack(int id)
+        {
+            return await (from r in _context.Races
+                          join t in _context.Tracks
+                          on r.TrackId equals t.Id
+                          where r.Id == id
+                          select new RaceDto { Id = r.Id, Laps = r.Laps, RaceDate = r.RaceDate, TrackId = r.TrackId, TrackName = t.Name }).ToListAsync();
+        }
+
         // GET: api/Races/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Race>> GetRace(int id)

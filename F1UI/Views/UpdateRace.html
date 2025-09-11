@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Driver Page</title>
+    <title>Team Page</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body onload="GetRaces()">
+<body onload="getRace()">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -21,31 +21,35 @@
             <ul class="nav navbar-nav">
                 <li><a href="Index.html">Home</a></li>
                 <li><a href="Driver.html">Drivers</a></li>
-                <li><a href="Team.html">Teams</a></li>
-                <li class="active"><a href="Race.html">Races</a></li>
+                <li class="active"><a href="Team.html">Teams</a></li>
+                <li><a href="Race.html">Races</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="div-style container" id="output">
-        <a href="CreateRace.html">Add new Race</a>
-        <table class="table table-hover" id="raceTable">
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Number of Laps</th>
-                <th>Track ID</th>
-                <th>Track Name</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </table>
-    </div>
+    <h2>Update Team</h2>
+    <table>
+        <tr>
+            <td><label id="RaceDate">Race Date (month-day-year): </label></td>
+            <td><input type="date" id="RaceDateInput" /></td>
+            <td><button onclick="ResetDate('RaceDateInput')">Reset Date</button></td>
+        </tr>
+        <tr>
+            <td><label id="Laps">Laps: </label></td>
+            <td><input id="LapInput" /></td>
+        </tr>
+        <tr id="Track">
+            <td><label>Track: </label></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input id="TrackId" type="hidden" value=""/></td>
+        </tr>
+    </table>
 
+    <button onclick="loadJsonData('Races', 'PUT', getId())">Input data</button>
 
     <script src="js/Script.js">
     </script>
-
-
 </body>
 </html>

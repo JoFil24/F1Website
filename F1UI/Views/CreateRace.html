@@ -1,5 +1,4 @@
-﻿<!DOCTYPE html>
-<html>
+﻿<html>
 <head>
     <meta charset="utf-8" />
     <title>Driver Page</title>
@@ -12,7 +11,7 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body onload="GetRaces()">
+<body onload="TrackDropdown()">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -27,25 +26,32 @@
         </div>
     </nav>
 
-    <div class="div-style container" id="output">
-        <a href="CreateRace.html">Add new Race</a>
-        <table class="table table-hover" id="raceTable">
-            <tr>
-                <th>ID</th>
-                <th>Date</th>
-                <th>Number of Laps</th>
-                <th>Track ID</th>
-                <th>Track Name</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </table>
-    </div>
+    <h2>Create Race</h2>
+    <table>
+        <tr>
+            <td><label id="RaceDate">Race Date (month-day-year):  </label></td>
+            <td><input id="RaceDateInput" type="date" /></td>
+            <td><button onclick="ResetDate('RaceDateInput')">Reset Date</button></td>
+        </tr>
+        <tr>
+            <td><label id="Laps">Laps: </label></td>
+            <td><input id="LapInput" type="number" max="100" min="1" /></td>
+        </tr>
+        <tr>
+            <td>
+                <label name="track">Track: </label>
+            </td>
+            <td>
+                <select id="TrackId">
+                    <option selected="selected"></option>
+                </select>
+            </td>
+        </tr>
+    </table>
 
+    <button onclick="loadJsonData('Races', 'POST')">Input data</button>
 
     <script src="js/Script.js">
     </script>
-
-
 </body>
 </html>

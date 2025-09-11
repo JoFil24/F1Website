@@ -6,6 +6,23 @@ function updatePageRedirect(page, id) {
     window.location.href = page + id;
 }
 
+function convertDateFormat(date=null) {
+    debugger;
+    if (date === null) {
+        //default is today
+        var dateObj = new Date();
+    }
+    else {
+        var dateObj = new Date(date);
+    }
+
+    var year = dateObj.getFullYear();
+    var month = ("0" + (dateObj.getMonth() + 1)).slice(-2);
+    var day = ("0" + dateObj.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
+}
+
 function getSelectedOptionId(id) {
     debugger;
     document.querySelector(`#${id}`).addEventListener('change', function (e) {
@@ -294,6 +311,14 @@ function loadJsonData(table, method, id = null, id2 = null) {
             "raceNumber": $("#RaceNumber").val()
         }
     }
+    else if (table === "Races") {
+        var postdataObj = {
+            "raceDate": document.getElementById("RaceDateInput").value,
+            "laps": document.getElementById("LapInput").value,
+            "trackId": document.getElementById("TrackId").value,
+            "isVisible": true
+        }
+    }
 
     if (method === 'POST') {
         if (table === "DriverTeams") {
@@ -510,8 +535,8 @@ function GetRaces() {
                     }
                 }
 
-                $(`#${races[entry]['id']}`).append(`<td><a onclick=''>Update Race</a></td>`);
-                $(`#${races[entry]['id']}`).append(`<td><a onclick=''>Remove Race</a></td>`);
+                $(`#${races[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("UpdateRace.html?id=", ${races[entry]['id']})'>Update Race</a></td>`);
+                $(`#${races[entry]['id']}`).append(`<td><a onclick='DeleteRace(${races[entry]['id']})'>Remove Race</a></td>`);
             })
         },
         error: function (xhr, status, error) {
@@ -519,4 +544,76 @@ function GetRaces() {
             $('#output').text('Error: ' + error);
         }
     })
+}
+
+function TrackDropdown() {
+    $.ajax({
+        url: `https://localhost:7253/api/Tracks`,
+        method: 'GET',
+        success: function (data) {
+            debugger;
+
+            var tracks = data;
+
+            //set today's date as the minimum value
+            $("#RaceDateInput").attr('min', convertDateFormat());
+
+            Object.keys(tracks).forEach(function (entry) {
+                $("#TrackId").append(`<option value="${tracks[entry]['id']}">${tracks[entry]['name']}</option>`);
+            })
+        } ,
+        error: function (xhr, status, error) {
+            debugger;
+            alert("Error: " + status + " " + error);
+        }
+    })
+}
+
+function getRace() {
+    var id = getId();
+
+    $.ajax({
+        url: `https://localhost:7253/api/Races/RacesWithTracks/${id}`,
+        method: 'GET',
+        success: function (data) {
+            debugger;
+
+            //only one race is present anyways
+            var race = data[0];
+
+            $("#RaceDateInput").attr('value', convertDateFormat(race['raceDate']));
+            $("#LapInput").val(race['laps']);
+            $("#Track").append(`<td><p>${race['trackName']}</p></td>`);
+            document.getElementById('TrackId').value = race['trackId'];
+        } ,
+        error: function(xhr, status, error) {
+            debugger;
+            alert("Error: " + status + " " + error);
+        }
+    })
+}
+
+function DeleteRace(id) {
+    if (confirm("Are you sure you want to delete the race with ID: " + id)) {
+        try {
+            $.ajax({
+                url: `https://localhost:7253/api/Races/${id}`,
+                type: 'DELETE',
+                success: getSuccess,
+                error: getFail
+            });
+        }
+        catch (e) {
+            alert(e);
+        }
+        function getSuccess(data, textStatus, jqXHR) {
+            debugger;
+            alert(`Delete race with ID ` + id);
+            redirectMainPage("Race.html");
+        };
+        function getFail(jqXHR, textStatus, errorThrown) {
+            debugger;
+            alert(jqXHR.status);
+        };
+    }
 }
