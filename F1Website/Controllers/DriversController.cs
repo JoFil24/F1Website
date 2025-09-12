@@ -140,7 +140,10 @@ namespace F1Website.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDriver(int id)
         {
-            var driver = await _context.Drivers.FindAsync(id);
+            //var driver = await _context.Drivers.FindAsync(id);
+            var driver = await _context.Drivers
+                .Include(d => d.DriverTeams)
+                .FirstOrDefaultAsync(d => d.Id == id);
 
             if (driver == null)
             {
@@ -148,6 +151,11 @@ namespace F1Website.Controllers
             }
 
             driver.IsVisible = false;
+
+            foreach(var driverTeam in driver.DriverTeams.Where(dt => dt.DateTo == null))
+            {
+                driverTeam.DateTo = DateTime.UtcNow;
+            }
 
             //_context.Drivers.Update(driver);
             await _context.SaveChangesAsync();

@@ -4,6 +4,14 @@ using F1Website.Models;
 
 namespace F1Website.Controllers
 {
+    public class TrackDto
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public string? Country { get; set; }
+        public double Length { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class TracksController : ControllerBase
@@ -17,9 +25,9 @@ namespace F1Website.Controllers
 
         // GET: api/Tracks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Track>>> GetTracks()
+        public async Task<ActionResult<IEnumerable<TrackDto>>> GetTracks()
         {
-            return await _context.Tracks.Where(i => i.IsVisible).ToListAsync();
+            return await _context.Tracks.Where(i => i.IsVisible).Select(t => new TrackDto { Id = t.Id, Country = t.Country, Length = t.Length, Name = t.Name}).ToListAsync();
         }
 
         [HttpGet("all")]

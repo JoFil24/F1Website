@@ -101,13 +101,23 @@ namespace F1Website.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeam(int id)
         {
-            var team = await _context.Teams.FindAsync(id);
+            //var team = await _context.Teams.FindAsync(id);
+            var team = await _context.Teams
+                .Include(t => t.DriverTeams)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
             if (team == null)
             {
                 return NotFound();
             }
 
             team.IsVisible = false;
+
+            foreach(var driverTeam in team.DriverTeams.Where(dt => dt.DateTo == null))
+            {
+                driverTeam.DateTo = DateTime.UtcNow;
+            }
+
             //_context.Teams.Remove(team);
             await _context.SaveChangesAsync();
 
