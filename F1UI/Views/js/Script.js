@@ -103,14 +103,18 @@ function loadJsonData(table, method, id = null, id2 = null) {
 
     method = method.toUpperCase();
 
-    if (table === "Drivers" || table === "Teams") {
+    if (table === "Drivers" || table === "Teams" || table === "Tracks") {
         var postdataObj = {
             "name": document.getElementById("NameInput").value,
             "isVisible": true
         }
 
-        if (table === "Drivers") {
+        if (table === "Drivers" || table === "Tracks") {
             postdataObj['country'] = document.getElementById("CountryInput").value;
+
+            if (table === "Tracks") {
+                postdataObj['length'] = document.getElementById("LengthInput").value;
+            }
         }
         else if (table === "Teams") {
             postdataObj['engine'] = document.getElementById("EngineInput").value;
@@ -271,6 +275,10 @@ function defaultValues(table) {
                     $('#NameInput').val(data.name);
                     $('#EngineInput').val(data.engine);
                     break;
+                case 'TRACK', 'TRACKS':
+                    $('#NameInput').val(data.name);
+                    $('#CountryInput').val(data.country);
+                    $('#LengthInput').val(data.length);
             }
         })
         .fail(function (xhr, status, error) {

@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Driver Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body onload="defaultValues('Tracks')">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="Driver.html">Drivers</a></li>
+                <li><a href="Team.html">Teams</a></li>
+                <li><a href="Race.html">Races</a></li>
+                <li class="active"><a href="Track.html">Track</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <h2>Update Driver</h2>
+    <table>
+        <tr>
+            <td><label id="Name">Name: </label></td>
+            <td><input id="NameInput" /></td>
+        </tr>
+        <tr>
+            <td><label id="Country">Country: </label></td>
+            <td><input id="CountryInput" /></td>
+        </tr>
+        <tr>
+            <td><label id="Length">Length (km):</label></td>
+            <td><input id="LengthInput" /></td>
+        </tr>
+    </table>
+
+    <button onclick="loadJsonData('Tracks', 'PUT', getId())">Input data</button>
+
+    <script src="js/Script.js">
+    </script>
+</body>
+</html>
