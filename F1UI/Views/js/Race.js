@@ -54,6 +54,9 @@ function GetRaces() {
 
                 $(`#${races[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("UpdateRace.html?id=", ${races[entry]['id']})'>Update Race</a></td>`);
                 $(`#${races[entry]['id']}`).append(`<td><a onclick='DeleteRace(${races[entry]['id']})'>Remove Race</a></td>`);
+
+                //this is for the points, updatePageRedirect is used to add the id parameter
+                $(`#${races[entry]['id']}`).append(`<td><a onclick='updatePageRedirect("Points.html?id=", ${races[entry]['id']})'>Results</a></td>`);
             })
         },
         error: function (xhr, status, error) {

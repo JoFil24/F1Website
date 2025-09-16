@@ -9,6 +9,14 @@ using F1Website.Models;
 
 namespace F1Website.Controllers
 {
+    public class PointsDto
+    {
+        public int DriverId { get; set; }
+        public double? Points { get; set; }
+        public int? Position { get; set; }
+        public string? DriverName { get; set; }
+    }
+
     [Route("api/[controller]")]
     [ApiController]
     public class PointsController : ControllerBase
@@ -71,6 +79,19 @@ namespace F1Website.Controllers
             }
 
             return Ok(point);
+        }
+
+        [HttpGet("raceDriverNames/{raceId}")]
+        public async Task<ActionResult<IEnumerable<PointsDto>>> GetPointsFromRaceDriverNames(int raceId)
+        {
+            return await (from p in _context.Points
+                          join r in _context.Races
+                          on p.RaceId equals r.Id
+                          join d in _context.Drivers
+                          on p.DriverId equals d.Id
+                          where p.RaceId == raceId
+                          orderby p.Position ascending
+                          select new PointsDto { DriverId = p.DriverId, DriverName = d.Name, Points = p.Points, Position = p.Position }).ToListAsync();
         }
 
         // PUT: api/Points/5
