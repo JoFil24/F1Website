@@ -6,6 +6,18 @@ function updatePageRedirect(page, id) {
     window.location.href = page + id;
 }
 
+//for the params, the needed input is
+//"raceId=${raceId}"
+function multipleParamsRedirect(page, param1, param2) {
+    debugger;
+    var pageWithParams = page + "?";
+    for (var i = 0; i < paramList.length; i++) {
+        pageWithParams = pageWithParams + paramList[i] + "&";
+    }
+
+    window.location.href = pageWithParams;
+}
+
 function convertDateFormat(date=null) {
     debugger;
     if (date === null) {
@@ -81,7 +93,7 @@ function loadJsonData(table, method, id = null, id2 = null) {
         case "point".toUpperCase(), "points".toUpperCase():
             table = "Points";
             entity = "points scoring";
-            html = "Points.html"
+            html = `Points.html?id=${id2}`
             break;
 
         case "race".toUpperCase(), "races".toUpperCase():
@@ -132,6 +144,15 @@ function loadJsonData(table, method, id = null, id2 = null) {
             "laps": document.getElementById("LapInput").value,
             "trackId": document.getElementById("TrackId").value,
             "isVisible": true
+        }
+    }
+
+    else if (table === "Points") {
+        var postdataObj = {
+            "raceId": id2,
+            "driverId": id,
+            "points": document.getElementById("pointsInput").value,
+            "position": document.getElementById("positionInput").value
         }
     }
 

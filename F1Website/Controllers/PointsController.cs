@@ -11,6 +11,7 @@ namespace F1Website.Controllers
 {
     public class PointsDto
     {
+        public int RaceId { get; set; }
         public int DriverId { get; set; }
         public double? Points { get; set; }
         public int? Position { get; set; }
@@ -91,7 +92,20 @@ namespace F1Website.Controllers
                           on p.DriverId equals d.Id
                           where p.RaceId == raceId
                           orderby p.Position ascending
-                          select new PointsDto { DriverId = p.DriverId, DriverName = d.Name, Points = p.Points, Position = p.Position }).ToListAsync();
+                          select new PointsDto { RaceId = p.RaceId, DriverId = p.DriverId, DriverName = d.Name, Points = p.Points, Position = p.Position }).ToListAsync();
+        }
+
+        [HttpGet("raceDriverNames/{driverId}/{raceId}")]
+        public async Task<ActionResult<IEnumerable<PointsDto>>> GetPointsFromRaceDriverName(int raceId, int driverId)
+        {
+            return await (from p in _context.Points
+                          join r in _context.Races
+                          on p.RaceId equals r.Id
+                          join d in _context.Drivers
+                          on p.DriverId equals d.Id
+                          where p.RaceId == raceId
+                          && p.DriverId == driverId
+                          select new PointsDto { RaceId = p.RaceId, DriverId = p.DriverId, DriverName = d.Name, Points = p.Points, Position = p.Position }).ToListAsync();
         }
 
         // PUT: api/Points/5

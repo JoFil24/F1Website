@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Team Page</title>
+    <title>Driver Page</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="css/style.css" />
 </head>
 
-<body onload="defaultValues('Teams')">
+<body onload="getOnePointsEntry()">
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -20,29 +20,33 @@
             </div>
             <ul class="nav navbar-nav">
                 <li><a href="Index.html">Home</a></li>
-                <li><a href="Driver.html">Drivers</a></li>
-                <li class="active"><a href="Team.html">Teams</a></li>
+                <li class="active"><a href="Driver.html">Drivers</a></li>
+                <li><a href="Team.html">Teams</a></li>
                 <li><a href="Race.html">Races</a></li>
                 <li><a href="Track.html">Track</a></li>
             </ul>
         </div>
     </nav>
 
-    <h2>Update Team</h2>
+    <h2>Update Points</h2>
     <table>
         <tr>
-            <td><label id="Name">Name: </label></td>
-            <td><input id="NameInput" /></td>
+            <td><label id="Driver">Driver: </label></td>
+            <td><p id="driverDisplay"></p></td>
         </tr>
         <tr>
-            <td><label id="Engine">Engine: </label></td>
-            <td><input id="EngineInput" /></td>
+            <td><label id="Position">Position: </label></td>
+            <td><input id="positionInput" min="1" max="26" /></td>
+        </tr>
+        <tr>
+            <td><label id="Points">Points: </label></td>
+            <td><input id="pointsInput" step="0.1" min="0" max="25" /></td>
         </tr>
     </table>
 
-    <button onclick="loadJsonData('Points', 'PUT', getId())">Input data</button>
+    <button id="submitButton">Input data</button>
 
-    <script src="js/Script.js">
-    </script>
+    <script src="js/Points.js"></script>
+    <script src="js/Script.js"></script>
 </body>
 </html>
