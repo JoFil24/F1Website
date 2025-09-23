@@ -93,7 +93,6 @@ function loadJsonData(table, method, id = null, id2 = null) {
         case "point".toUpperCase(), "points".toUpperCase():
             table = "Points";
             entity = "points scoring";
-            html = `Points.html?id=${id2}`
             break;
 
         case "race".toUpperCase(), "races".toUpperCase():
@@ -149,8 +148,6 @@ function loadJsonData(table, method, id = null, id2 = null) {
 
     else if (table === "Points") {
         var postdataObj = {
-            "raceId": id2,
-            "driverId": id,
             "points": document.getElementById("pointsInput").value,
             "position": document.getElementById("positionInput").value
         }
@@ -182,6 +179,15 @@ function loadJsonData(table, method, id = null, id2 = null) {
 
             postdataObj['dateFrom'] = dateFromString;
             postdataObj['dateTo'] = dateToString;
+        }
+
+        if (table === "Points") {
+            debugger;
+
+            postdataObj['driverId'] = document.getElementById('driver').value;
+            postdataObj['raceId'] = document.getElementById('race').value;
+
+            html = `Points.html?id=${postdataObj['raceId']}`
         }
 
         var url = `https://localhost:7253/api/${table}`;
@@ -217,6 +223,13 @@ function loadJsonData(table, method, id = null, id2 = null) {
 
                 postdataObj['dateFrom'] = dateFromString;
                 postdataObj['dateTo'] = dateToString;
+            }
+
+            if (table === "Points") {
+                postdataObj['driverId'] = id;
+                postdataObj['raceId'] = id2;
+
+                html = `Points.html?id=${id2}`
             }
 
             var url = `https://localhost:7253/api/${table}/${id}/${id2}`;

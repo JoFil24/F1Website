@@ -27,6 +27,46 @@
     })
 }
 
+function pointsDropdown() {
+    $.ajax({
+        url: `https://localhost:7253/api/Drivers`,
+        method: 'GET',
+        success: function (driverData) {
+            debugger;
+            var drivers = driverData;
+
+            //put id as value and name as the displayed value
+            Object.keys(drivers).forEach(function (entry) {
+                $('#driver').append(`<option value=${drivers[entry]['id']}>${drivers[entry]['name']}</option>`);
+            })
+
+            $.ajax({
+                url: `https://localhost:7253/api/Races/RacesWithTracks`,
+                method: 'GET',
+                success: function (raceData) {
+                    debugger;
+                    var races = raceData;
+
+                    Object.keys(races).forEach(function (entry) {
+                        var raceDate = new Date(races[entry]['raceDate']);
+                        var raceYear = raceDate.getFullYear();
+
+                        $('#race').append(`<option value=${races[entry]['id']}>${races[entry]['trackName']} ${raceYear}</option>`);
+                    })
+                },
+                error: function (xhr, status, error) {
+                    debugger;
+                    $('#output').text('Error: ' + error);
+                }
+            })
+        },
+        error: function (xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    })
+}
+
 function getOnePointsEntry() {
     var queryString = window.location.search;
     var urlParams = new URLSearchParams(queryString);

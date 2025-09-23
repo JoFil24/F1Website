@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Driver Page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body onload="pointsDropdown()">
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">WebSiteName</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li><a href="Index.html">Home</a></li>
+                <li><a href="Driver.html">Drivers</a></li>
+                <li><a href="Team.html">Teams</a></li>
+                <li><a href="Race.html">Races</a></li>
+                <li><a href="Track.html">Track</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <table>
+        <tr>
+            <td>
+                <label for="drivers">Choose a driver: </label>
+            </td>
+            <td>
+                <select name="drivers" id="driver">
+                    <option selected="selected"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="races">Choose a race: </label>
+            </td>
+            <td>
+                <select name="races" id="race">
+                    <option selected="selected"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="pos">Choose the Driver's Finishing Position: </label>
+            </td>
+            <td>
+                <input type="number" id="positionInput" name="pos" required min="1" max="26" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="pts">Choose the Number of Points: </label>
+            </td>
+            <td>
+                <input type="number" id="pointsInput" name="pts" required step="0.5" min="0" max="25" />
+            </td>
+        </tr>
+    </table>
+
+    <button id="submitButton" onclick="loadJsonData('Points', 'POST')">Submit</button>
+
+    <script src="js/Points.js"></script>
+    <script src="js/Script.js">
+    </script>
+
+
+</body>
+</html>
