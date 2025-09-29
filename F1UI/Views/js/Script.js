@@ -265,7 +265,12 @@ function loadJsonData(table, method, id = null, id2 = null) {
     function getSuccess(data, textStatus, jqXHR) {
         debugger;
         if (data) {
-            alert(`Created ${entity} with ID: ${data.id}`);
+            if (data.id) {
+                alert(`Created ${entity} with ID: ${data.id}`);
+            }
+            else {
+                alert(`Created entry for table ${table}`)
+            }
         }
         else {
             alert(`Updated ${entity}`);
