@@ -57,12 +57,20 @@
                 <input type="number" id="positionInput" name="pos" required min="1" max="26" />
             </td>
         </tr>
-        <tr>
+        <!--<tr>
             <td>
                 <label for="pts">Choose the Number of Points: </label>
             </td>
             <td>
                 <input type="number" id="pointsInput" name="pts" required step="0.5" min="0" max="25" />
+            </td>
+        </tr>-->
+        <tr>
+            <td>
+                <label for="halfPointsCheck">Did the race award half points</label>
+            </td>
+            <td>
+                <input type="checkbox" name="halfPointsCheck" id="halfPointsCheck">
             </td>
         </tr>
     </table>
@@ -70,8 +78,7 @@
     <button id="submitButton" onclick="loadJsonData('Points', 'POST')">Submit</button>
 
     <script src="js/Points.js"></script>
-    <script src="js/Script.js">
-    </script>
+    <script src="js/Script.js"></script>
 
 
 </body>

@@ -147,9 +147,15 @@ function loadJsonData(table, method, id = null, id2 = null) {
     }
 
     else if (table === "Points") {
+        debugger;
+        let position = document.getElementById("positionInput").value;
+
+        //checkbox if half points were awarded in the race
+        let halfPoints = document.getElementById("halfPointsCheck").checked;
+
         var postdataObj = {
-            "points": document.getElementById("pointsInput").value,
-            "position": document.getElementById("positionInput").value
+            "position": position,
+            "points": pointsSystem(position, halfPoints)
         }
     }
 
