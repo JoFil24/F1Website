@@ -48,12 +48,15 @@ namespace F1Website.Controllers
         [HttpGet("DriverTeamPairs")]
         public async Task<ActionResult<IEnumerable<DriverTeamDto>>> GetDriverTeamPairs()
         {
+            var today = DateTime.Now;
+
             return await (from D in _context.Drivers
                           join DT in _context.DriverTeams
                           on D.Id equals DT.DriverId
                           join T in _context.Teams
                           on DT.TeamId equals T.Id
-                          where DT.DateTo == null &&
+                          where (DT.DateTo == null ||
+                          DT.DateTo > today) &&
                           D.IsVisible == true &&
                           T.IsVisible == true
                           select new DriverTeamDto { Id = D.Id, TeamId = T.Id, Name = D.Name, Country = D.Country, RaceNumber = DT.RaceNumber, Team = T.Name}).ToListAsync();

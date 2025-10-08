@@ -100,7 +100,10 @@ namespace F1Website.Controllers
                 return BadRequest();
             }
 
-            //asdfgdgsds
+            if (driverTeam.DateFrom > driverTeam.DateTo)
+            {
+                throw new InvalidOperationException("Starting date can not be after ending date");
+            }
 
             _context.Entry(driverTeam).State = EntityState.Modified;
 
