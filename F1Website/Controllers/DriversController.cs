@@ -70,8 +70,7 @@ namespace F1Website.Controllers
                           on D.Id equals DT.DriverId
                           join T in _context.Teams
                           on DT.TeamId equals T.Id
-                          where DT.DateTo == null &&
-                          D.IsVisible == true &&
+                          where D.IsVisible == true &&
                           T.IsVisible == true &&
                           D.Id == id
                           select new DriverTeamDto { Id = D.Id, TeamId = T.Id, Name = D.Name, Country = D.Country, RaceNumber = DT.RaceNumber, Team = T.Name }).ToListAsync();
