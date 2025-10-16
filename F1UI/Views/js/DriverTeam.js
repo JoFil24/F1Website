@@ -103,6 +103,18 @@ function getOneDriverTeam() {
 
                     $('#DateTo').append(`<td><input type="date" id='DateToInput' / ></td>`);
                     $('#DateTo').append(`<button onclick="ResetDate('DateToInput')">Reset Date</a>`);
+
+                    if (driverTeam['dateTo'] !== null) {
+                        var dateTo = new Date(driverTeam['dateTo']);
+
+                        var yearTo = dateTo.getFullYear();
+                        var monthTo = ("0" + (dateTo.getMonth() + 1)).slice(-2);
+                        var dayTo = ("0" + dateTo.getDate()).slice(-2);
+
+                        var dateToValue = yearTo + "-" + monthTo + "-" + dayTo;
+
+                        $('#DateToInput').val(dateToValue);
+                    }
                 },
                 error: function (xhr, status, error) {
                     debugger;
