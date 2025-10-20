@@ -167,3 +167,46 @@ function pointsSystem(position, halfPoints) {
 
     return points;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    $.ajax({
+        url: `https://localhost:7253/api/Races/RacesWithTracks/`,
+        method: GET,
+        success: function (data) {
+            debugger;
+            var races = data;
+
+            Object.keys(races).forEach(function (entry) {
+                var raceDate = new Date(races[entry]['raceDate']);
+                var raceYear = raceDate.getFullYear();
+
+                $('#race').append(`<option value=${races[entry]['id']}>${races[entry]['trackName']} ${raceYear}</option>`);
+            })
+        },
+        error: function (xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    })
+})
+
+document.addEventListe('DOMContentLoaded', function () {
+    $.ajax({
+        url: `https://localhost:7253/api/DriverTeamPairs`,
+        method: GET,
+        success: function (data) {
+            debugger;
+            var drivers = data;
+
+            Object.keys(drivers).forEach(function(entry) {
+                var tr = document.createElement('tr');
+
+                
+            })
+        }, 
+        error: function(xhr, status, error) {
+            debugger;
+            $('#output').text('Error: ' + error);
+        }
+    })
+})

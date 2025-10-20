@@ -39,7 +39,7 @@
                 </select>
             </td>
         </tr>
-        <tr>
+        <!--<tr>
             <td>
                 <label for="races">Choose a race: </label>
             </td>
@@ -48,7 +48,7 @@
                     <option selected="selected"></option>
                 </select>
             </td>
-        </tr>
+        </tr>-->
         <tr>
             <td>
                 <label for="pos">Choose the Driver's Finishing Position: </label>
@@ -75,6 +75,13 @@
         </tr>
     </table>
 
+    <div id="raceSelect">
+        <label for="races">Choose a race: </label>
+        <select name="races" id="race">
+            <option selected="selected"></option>
+        </select>
+    </div>
+
     <button id="submitButton" style="float: right; margin-right: 50px; margin-bottom: 10px" onclick="loadJsonData('Points', 'POST')">Submit</button>
 
     <button style="margin-left: 10px; margin-bottom: 10px" id="addDriver">Add Driver</button>
@@ -83,6 +90,7 @@
         <tr>
             <th>Position</th>
             <th>Driver</th>
+            <th>Team</th>
             <th>Race Number</th>
             <th></th>
         </tr>
