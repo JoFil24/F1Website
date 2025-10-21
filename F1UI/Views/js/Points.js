@@ -168,10 +168,10 @@ function pointsSystem(position, halfPoints) {
     return points;
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+function raceSelectDropdown() {
     $.ajax({
         url: `https://localhost:7253/api/Races/RacesWithTracks/`,
-        method: GET,
+        method: 'GET',
         success: function (data) {
             debugger;
             var races = data;
@@ -188,20 +188,43 @@ document.addEventListener('DOMContentLoaded', function () {
             $('#output').text('Error: ' + error);
         }
     })
-})
+}
 
-document.addEventListe('DOMContentLoaded', function () {
+function driverTableAutoGenerate() {
     $.ajax({
-        url: `https://localhost:7253/api/DriverTeamPairs`,
-        method: GET,
+        url: `https://localhost:7253/api/Drivers/DriverTeamPairs`,
+        method: 'GET',
         success: function (data) {
             debugger;
             var drivers = data;
 
+            //add all the positions selected
+            var select = document.createElement('select');
+            select.name = "position";
+
+            for (let i = 0; i < 26; i++) {
+                let option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+
+                select.appendChild(option);
+            }
+
             Object.keys(drivers).forEach(function(entry) {
                 var tr = document.createElement('tr');
+                tr.id = `${drivers[entry]['id']}`;
 
-                
+                $("#driverRaceTable").append(tr);
+
+                let removeButton = document.createElement('button');
+                removeButton.textContent = 'X';
+                removeButton.addEventListener('click', removeElement(tr));
+
+                $(`#${drivers[entry]['id']}`).append(`<td>${select}</td>`);
+                $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry]['name']}</td>`);
+                $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry]['team']}</td>`);
+                $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry]['raceNumber']}</td>`);
+                $(`#${drivers[entry]['id']}`).append(`<td>${removeButton}</td>`);
             })
         }, 
         error: function(xhr, status, error) {
@@ -209,4 +232,20 @@ document.addEventListe('DOMContentLoaded', function () {
             $('#output').text('Error: ' + error);
         }
     })
-})
+}
+
+function removeElement(el) {
+    let element = el;
+    element.remove();
+}
+
+function addElement(el, parent) {
+    let element = el;
+    parent.appendChild(element);
+}
+
+//execute both function on page onload
+function createPointsTableOnload() {
+    raceSelectDropdown();
+    driverTableAutoGenerate();
+}
