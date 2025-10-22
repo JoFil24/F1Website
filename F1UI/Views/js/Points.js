@@ -173,7 +173,7 @@ function raceSelectDropdown() {
         url: `https://localhost:7253/api/Races/RacesWithTracks/`,
         method: 'GET',
         success: function (data) {
-            debugger;
+            //debugger;
             var races = data;
 
             Object.keys(races).forEach(function (entry) {
@@ -199,16 +199,6 @@ function driverTableAutoGenerate() {
             var drivers = data;
 
             //add all the positions selected
-            var select = document.createElement('select');
-            select.name = "position";
-
-            for (let i = 0; i < 26; i++) {
-                let option = document.createElement('option');
-                option.value = i;
-                option.textContent = i;
-
-                select.appendChild(option);
-            }
 
             Object.keys(drivers).forEach(function(entry) {
                 var tr = document.createElement('tr');
@@ -218,13 +208,18 @@ function driverTableAutoGenerate() {
 
                 let removeButton = document.createElement('button');
                 removeButton.textContent = 'X';
-                removeButton.addEventListener('click', removeElement(tr));
+                removeButton.addEventListener('click', () => removeElement(tr));
 
-                $(`#${drivers[entry]['id']}`).append(`<td>${select}</td>`);
+                //if I add it as a string, it only prints the object as text and doesn't actually add the dropdown
+                //I know this code is shit but it works fuck it
+
+                //$(`#${drivers[entry]['id']}`).append(`<td>${select}</td>`);
+                $(`#${drivers[entry]['id']}`).append(document.createElement('td').appendChild(pointsEntryPositionDropdown(drivers[entry]['id'])));
                 $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry]['name']}</td>`);
                 $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry]['team']}</td>`);
                 $(`#${drivers[entry]['id']}`).append(`<td>${drivers[entry]['raceNumber']}</td>`);
-                $(`#${drivers[entry]['id']}`).append(`<td>${removeButton}</td>`);
+                //$(`#${drivers[entry]['id']}`).append(`<td>${removeButton}</td>`);
+                $(`#${drivers[entry]['id']}`).append(document.createElement('td').appendChild(removeButton));
             })
         }, 
         error: function(xhr, status, error) {
@@ -248,4 +243,19 @@ function addElement(el, parent) {
 function createPointsTableOnload() {
     raceSelectDropdown();
     driverTableAutoGenerate();
+}
+
+function pointsEntryPositionDropdown(id) {
+    var select = document.createElement('select');
+    select.name = `positionFor${id}`;
+
+    for (let i = 0; i < 26; i++) {
+        let option = document.createElement('option');
+        option.value = i;
+        option.textContent = i;
+
+        select.appendChild(option);
+    }
+
+    return select;
 }
