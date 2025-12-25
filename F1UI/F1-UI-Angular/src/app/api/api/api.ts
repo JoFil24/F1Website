@@ -1,0 +1,13 @@
+export * from './driverTeams.service';
+import { DriverTeamsService } from './driverTeams.service';
+export * from './drivers.service';
+import { DriversService } from './drivers.service';
+export * from './points.service';
+import { PointsService } from './points.service';
+export * from './races.service';
+import { RacesService } from './races.service';
+export * from './teams.service';
+import { TeamsService } from './teams.service';
+export * from './tracks.service';
+import { TracksService } from './tracks.service';
+export const APIS = [DriverTeamsService, DriversService, PointsService, RacesService, TeamsService, TracksService];

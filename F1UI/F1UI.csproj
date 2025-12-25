@@ -6,4 +6,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="wwwroot\F1-Angular\**" />
+    <Content Remove="wwwroot\F1-Angular\**" />
+    <EmbeddedResource Remove="wwwroot\F1-Angular\**" />
+    <None Remove="wwwroot\F1-Angular\**" />
+	  <Content Remove="F1-UI-Angular\**" />
+  </ItemGroup>
+
 </Project>
