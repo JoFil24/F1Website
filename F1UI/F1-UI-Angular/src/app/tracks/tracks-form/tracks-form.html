@@ -1,0 +1,8 @@
+<h2>{{ isEdit ? 'Edit' : 'Create' }} Driver</h2>
+
+<form (ngSubmit)="save()">
+  <input [(ngModel)]="track.name" name="name" placeholder="Name" required />
+  <input [(ngModel)]="track.country" name="country" placeholder="Country" required />
+  <input [(ngModel)]="track.length" name="length" placeholder="Length (km)" required />
+  <button type="submit">Save</button>
+</form>

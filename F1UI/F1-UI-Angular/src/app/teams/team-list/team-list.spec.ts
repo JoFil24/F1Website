@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DriverList } from './driver-list';
+import { TeamList } from './team-list';
 
-describe('DriverList', () => {
-  let component: DriverList;
-  let fixture: ComponentFixture<DriverList>;
+describe('TeamList', () => {
+  let component: TeamList;
+  let fixture: ComponentFixture<TeamList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DriverList]
+      imports: [TeamList]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DriverList);
+    fixture = TestBed.createComponent(TeamList);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    await fixture.whenStable();
   });
 
   it('should create', () => {

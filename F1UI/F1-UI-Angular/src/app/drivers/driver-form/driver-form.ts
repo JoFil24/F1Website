@@ -13,31 +13,35 @@ import { DriversService, Driver } from '../../api';
   styleUrl: './driver-form.css',
 })
 export class DriverForm implements OnInit{
-    driver: Driver = {};
-    isEdit = false;
+  driver: Driver = {};
+  isEdit = false;
 
-    constructor(
-        private driversService: DriversService,
-        private route: ActivatedRoute,
-        private router: Router
-    ) {}
+  constructor(
+    private riderService: DriversService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
-    ngOnInit(): void {
+  ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isEdit = true;
-      this.driversService.apiDriversIdGet(id).subscribe(d => {
-        this.driver = d ?? [];
+      this.riderService.apiDriversIdGet(id).subscribe(d => {
+        this.driver = d;
       });
     }
   }
 
   save() {
     if (this.isEdit) {
-      this.driversService.apiDriversIdPut(this.driver.id!, this.driver)
+      this.riderService.apiDriversIdPut(this.driver.id!, this.driver)
         .subscribe(() => this.router.navigate(['/drivers']));
     } else {
-      this.driversService.apiDriversPost(this.driver)
+      // Ensure new drivers are visible by default
+      if (this.driver.isVisible === undefined) {
+        this.driver.isVisible = true;
+      }
+      this.riderService.apiDriversPost(this.driver)
         .subscribe(() => this.router.navigate(['/drivers']));
     }
   }

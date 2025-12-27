@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule} from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DriversService, Driver } from '../../api';
+import { DriversService, DriverTeamDto } from '../../api';
 
 @Component({
   selector: 'app-driver-list',
@@ -11,7 +11,7 @@ import { DriversService, Driver } from '../../api';
   styleUrl: './driver-list.css',
 })
 export class DriverList implements OnInit {
-  drivers: Driver[] = [];
+  drivers: DriverTeamDto[] = [];
 
   constructor(private driversService: DriversService, private cdr: ChangeDetectorRef) {}
 
@@ -20,9 +20,11 @@ export class DriverList implements OnInit {
   }
 
   loadDrivers(): void {
-    this.driversService.apiDriversAllGet().subscribe({
+    this.driversService.apiDriversDriverTeamPairsGet().subscribe({
       next: (d) => {
         this.drivers = d ?? [];
+
+        console.log('Loaded drivers:', this.drivers);
 
         // Ensure the UI updates after data load
         //Without this, the data doesn't show up in the table

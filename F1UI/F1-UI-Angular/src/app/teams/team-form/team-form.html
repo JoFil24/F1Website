@@ -1,0 +1,7 @@
+<h2>{{ isEdit ? 'Edit' : 'Create' }} Driver</h2>
+
+<form (ngSubmit)="save()">
+  <input [(ngModel)]="team.name" name="name" placeholder="Name" required />
+  <input [(ngModel)]="team.engine" name="engine" placeholder="Engine Manufacturer" required />
+  <button type="submit">Save</button>
+</form>

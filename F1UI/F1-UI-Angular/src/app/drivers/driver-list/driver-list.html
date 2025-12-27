@@ -5,6 +5,8 @@
     <tr>
       <th>Name</th>
       <th>Country</th>
+      <th>Race Number</th>
+      <th>Team</th>
       <th style="text-align: center;"><a routerLink="/drivers/new">new</a></th>
     </tr>
   </thead>
@@ -12,6 +14,8 @@
     <tr *ngFor="let driver of drivers">
       <td>{{ driver.name }}</td>
       <td>{{ driver.country }}</td>
+      <td>{{ driver.raceNumber }}</td>
+      <td>{{ driver.team }}</td>
       <td>
         <div class="d-flex gap-2">
         <a [routerLink]="['/drivers/edit', driver.id]" class="btn btn-primary btn-sm">Edit</a>
