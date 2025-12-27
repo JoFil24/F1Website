@@ -1,0 +1,25 @@
+<h2>Tracks</h2>
+
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Track Name</th>
+      <th>Number of Laps</th>
+      <th>Date</th>
+      <th style="text-align: center;"><a routerLink="/tracks/new">new</a></th>
+    </tr>
+  </thead>
+  <tbody class="table-primary">
+    <tr *ngFor="let race of races">
+      <td>{{ race.trackName }}</td>
+      <td>{{ race.laps }}</td>
+      <td>{{ race.raceDate }}</td>
+      <td>
+        <div class="d-flex gap-2">
+        <a [routerLink]="['/tracks/edit', race.id]" class="btn btn-primary btn-sm">Edit</a>
+        <button (click)="deleteRace(race.id!)" class="btn btn-danger btn-sm">Delete</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

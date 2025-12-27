@@ -17,7 +17,7 @@ export class DriverForm implements OnInit{
   isEdit = false;
 
   constructor(
-    private riderService: DriversService,
+    private driverService: DriversService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -26,7 +26,7 @@ export class DriverForm implements OnInit{
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isEdit = true;
-      this.riderService.apiDriversIdGet(id).subscribe(d => {
+      this.driverService.apiDriversIdGet(id).subscribe(d => {
         this.driver = d;
       });
     }
@@ -34,14 +34,14 @@ export class DriverForm implements OnInit{
 
   save() {
     if (this.isEdit) {
-      this.riderService.apiDriversIdPut(this.driver.id!, this.driver)
+      this.driverService.apiDriversIdPut(this.driver.id!, this.driver)
         .subscribe(() => this.router.navigate(['/drivers']));
     } else {
       // Ensure new drivers are visible by default
       if (this.driver.isVisible === undefined) {
         this.driver.isVisible = true;
       }
-      this.riderService.apiDriversPost(this.driver)
+      this.driverService.apiDriversPost(this.driver)
         .subscribe(() => this.router.navigate(['/drivers']));
     }
   }
