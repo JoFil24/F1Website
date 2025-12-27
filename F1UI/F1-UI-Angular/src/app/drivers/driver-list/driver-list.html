@@ -1,1 +1,23 @@
-<p>driver-list works!</p>
+<h2>Drivers</h2>
+
+<table class="table table-hover table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th style="text-align: center;"><a routerLink="/drivers/new">new</a></th>
+    </tr>
+  </thead>
+  <tbody class="table-primary">
+    <tr *ngFor="let driver of drivers">
+      <td>{{ driver.name }}</td>
+      <td>{{ driver.country }}</td>
+      <td>
+        <div class="d-flex gap-2">
+        <a [routerLink]="['/drivers/edit', driver.id]" class="btn btn-primary btn-sm">Edit</a>
+        <button (click)="deleteDriver(driver.id!)" class="btn btn-danger btn-sm">Delete</button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
