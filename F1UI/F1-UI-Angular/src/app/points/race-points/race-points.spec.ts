@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PointsList } from './points-list';
+import { RacePoints } from './race-points';
 
-describe('PointsList', () => {
-  let component: PointsList;
-  let fixture: ComponentFixture<PointsList>;
+describe('RacePoints', () => {
+  let component: RacePoints;
+  let fixture: ComponentFixture<RacePoints>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PointsList]
+      imports: [RacePoints]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PointsList);
+    fixture = TestBed.createComponent(RacePoints);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

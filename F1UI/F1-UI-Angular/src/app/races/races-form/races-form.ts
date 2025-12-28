@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { RacesService, Race } from '../../api';
+import { TracksService } from '../../api';
+import { TrackDto } from '../../api';
 
 @Component({
   selector: 'app-races-form',
@@ -15,14 +17,18 @@ import { RacesService, Race } from '../../api';
 export class RacesForm implements OnInit{
   race: Race = {};
   isEdit = false;
+  tracks: TrackDto[] = [];
 
   constructor(
     private racesService: RacesService,
+    private tracksService: TracksService,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    // Load tracks for dropdown
+    this.tracksService.apiTracksGet().subscribe(d => this.tracks = d ?? []);
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isEdit = true;

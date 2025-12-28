@@ -19,6 +19,22 @@ export class RacesList implements OnInit {
     this.loadRaces();
   }
 
+  //format the dates in a more readable way
+  formatDate(dateStr?: string | null): string {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return dateStr;
+    const day = d.getDate();
+    const year = d.getFullYear();
+    const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const month = monthNames[d.getMonth()];
+    const ordinal = (n: number) => {
+      const s = ["th","st","nd","rd"], v = n % 100;
+      return (s[(v-20)%10] || s[v] || s[0]);
+    };
+    return `${day}${ordinal(day)} ${month} ${year}`;
+  }
+
   loadRaces(): void {
     this.racesService.apiRacesRacesWithTracksGet().subscribe({
       next: (d) => {

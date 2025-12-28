@@ -1,1 +1,16 @@
-<p>races-form works!</p>
+<h2>{{ isEdit ? 'Edit' : 'Create' }} Race</h2>
+
+<form (ngSubmit)="save()">
+  <label>Track</label>
+  <select [(ngModel)]="race.trackId" name="trackId" required>
+    <option [ngValue]="undefined">-- Select track --</option>
+    <option *ngFor="let t of tracks" [ngValue]="t.id">{{ t.name }}</option>
+  </select>
+
+  <label>Laps</label>
+  <input type="number" [(ngModel)]="race.laps" name="laps" placeholder="Laps" required />
+
+  <label>Race Date</label>
+  <input type="date" [(ngModel)]="race.raceDate" name="raceDate" placeholder="Race Date" required />
+  <button type="submit">Save</button>
+</form>

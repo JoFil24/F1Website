@@ -6,6 +6,7 @@
       <th>Track Name</th>
       <th>Number of Laps</th>
       <th>Date</th>
+      <th>Results</th>
       <th style="text-align: center;"><a routerLink="/races/new">new</a></th>
     </tr>
   </thead>
@@ -13,7 +14,10 @@
     <tr *ngFor="let race of races">
       <td>{{ race.trackName }}</td>
       <td>{{ race.laps }}</td>
-      <td>{{ race.raceDate }}</td>
+      <td>{{ formatDate(race.raceDate) }}</td>
+      <td>
+        <a [routerLink]="['/races', race.id, 'points']" class="btn btn-secondary btn-sm">Results</a>
+      </td>
       <td>
         <div class="d-flex gap-2">
         <a [routerLink]="['/races/edit', race.id]" class="btn btn-primary btn-sm">Edit</a>
