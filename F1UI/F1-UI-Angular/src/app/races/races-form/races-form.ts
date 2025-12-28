@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -22,18 +22,20 @@ export class RacesForm implements OnInit{
   constructor(
     private racesService: RacesService,
     private tracksService: TracksService,
+    private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     // Load tracks for dropdown
-    this.tracksService.apiTracksGet().subscribe(d => this.tracks = d ?? []);
+    this.tracksService.apiTracksGet().subscribe(d => { this.tracks = d ?? []; this.cdr.detectChanges(); });
     const id = this.route.snapshot.params['id'];
     if (id) {
       this.isEdit = true;
       this.racesService.apiRacesIdGet(id).subscribe(d => {
         this.race = d;
+        this.cdr.detectChanges();
       });
     }
   }

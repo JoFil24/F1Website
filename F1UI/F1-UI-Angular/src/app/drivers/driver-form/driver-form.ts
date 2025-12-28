@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ export class DriverForm implements OnInit{
 
   constructor(
     private driverService: DriversService,
+    private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -28,6 +29,7 @@ export class DriverForm implements OnInit{
       this.isEdit = true;
       this.driverService.apiDriversIdGet(id).subscribe(d => {
         this.driver = d;
+        this.cdr.detectChanges();
       });
     }
   }

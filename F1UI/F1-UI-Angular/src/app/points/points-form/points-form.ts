@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -29,7 +29,8 @@ export class PointsForm implements OnInit{
     private tracksService: TracksService,
     private racesService: RacesService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +38,7 @@ export class PointsForm implements OnInit{
     const raceIdParam = this.route.snapshot.params['raceId'];
 
     // load only drivers that have teams (driver-team pairs) for dropdown
-    this.driversService.apiDriversDriverTeamPairsGet().subscribe(d => this.drivers = d ?? []);
+    this.driversService.apiDriversDriverTeamPairsGet().subscribe(d => { this.drivers = d ?? []; this.cdr.detectChanges(); });
 
     if (driverId != null && raceIdParam != null) {
       this.isEdit = true;
@@ -48,10 +49,11 @@ export class PointsForm implements OnInit{
         this.pointsEntry = d ?? {};
         this.selectedDriverId = this.pointsEntry.driverId;
         // load driver and track names for readonly display
-        this.driversService.apiDriversIdGet(dId).subscribe(dd => this.driverName = dd.name ?? null);
+        this.driversService.apiDriversIdGet(dId).subscribe(dd => { this.driverName = dd.name ?? null; this.cdr.detectChanges(); });
         this.racesService.apiRacesIdGet(rId).subscribe(rr => {
-          if (rr.trackId) this.tracksService.apiTracksIdGet(rr.trackId).subscribe(t => this.trackName = t.name ?? null);
+          if (rr.trackId) this.tracksService.apiTracksIdGet(rr.trackId).subscribe(t => { this.trackName = t.name ?? null; this.cdr.detectChanges(); });
         });
+        this.cdr.detectChanges();
       });
     } else {
       // create mode: raceId provided in route
@@ -59,7 +61,8 @@ export class PointsForm implements OnInit{
       if (rId) {
         this.raceId = Number(rId);
         this.racesService.apiRacesIdGet(this.raceId!).subscribe(rr => {
-          if (rr.trackId) this.tracksService.apiTracksIdGet(rr.trackId).subscribe(t => this.trackName = t.name ?? null);
+          if (rr.trackId) this.tracksService.apiTracksIdGet(rr.trackId).subscribe(t => { this.trackName = t.name ?? null; this.cdr.detectChanges(); });
+          this.cdr.detectChanges();
         });
       }
     }

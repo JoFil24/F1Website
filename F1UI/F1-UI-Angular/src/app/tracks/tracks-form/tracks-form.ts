@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ export class TracksForm implements OnInit{
 
   constructor(
     private tracksService: TracksService,
+    private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router
   ) {}
@@ -28,6 +29,7 @@ export class TracksForm implements OnInit{
       this.isEdit = true;
       this.tracksService.apiTracksIdGet(id).subscribe(d => {
         this.track = d;
+        this.cdr.detectChanges();
       });
     }
   }

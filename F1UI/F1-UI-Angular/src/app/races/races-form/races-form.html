@@ -1,16 +1,28 @@
 <h2>{{ isEdit ? 'Edit' : 'Create' }} Race</h2>
 
 <form (ngSubmit)="save()">
+  <div class="d-flex gap-2">
   <label>Track</label>
   <select [(ngModel)]="race.trackId" name="trackId" required>
     <option [ngValue]="undefined">-- Select track --</option>
     <option *ngFor="let t of tracks" [ngValue]="t.id">{{ t.name }}</option>
   </select>
+  </div>
+  <br/>
 
+  <div class="d-flex gap-2">
   <label>Laps</label>
   <input type="number" [(ngModel)]="race.laps" name="laps" placeholder="Laps" required />
+  </div>
+  <br/>
 
+  <div class="d-flex gap-2">
   <label>Race Date</label>
   <input type="date" [(ngModel)]="race.raceDate" name="raceDate" placeholder="Race Date" required />
-  <button type="submit">Save</button>
+  </div>
+
+  <br/>
+  <div class="d-flex gap-2">
+  <button class="btn btn-primary btn-sm" type="submit">Save</button>
+  </div>
 </form>

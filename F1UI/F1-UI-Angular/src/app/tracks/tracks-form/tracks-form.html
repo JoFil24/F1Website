@@ -1,8 +1,10 @@
-<h2>{{ isEdit ? 'Edit' : 'Create' }} Driver</h2>
+<h2>{{ isEdit ? 'Edit' : 'Create' }} Track</h2>
 
 <form (ngSubmit)="save()">
+  <div class="d-flex gap-2">
   <input [(ngModel)]="track.name" name="name" placeholder="Name" required />
   <input [(ngModel)]="track.country" name="country" placeholder="Country" required />
   <input [(ngModel)]="track.length" name="length" placeholder="Length (km)" required />
-  <button type="submit">Save</button>
+  <button class="btn btn-primary btn-sm" type="submit">Save</button>
+  </div>
 </form>
