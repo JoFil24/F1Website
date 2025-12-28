@@ -26,3 +26,13 @@
 <div style="margin-top:10px">
   <a routerLink="/races" class="btn btn-secondary">Back to races</a>
 </div>
+
+<h3 class="mt-4">Points by Driver</h3>
+
+<div style="height: 400px; max-width: 800px;">
+  <canvas
+    baseChart
+    [data]="chartData"
+    [type]="chartType">
+  </canvas>
+</div>

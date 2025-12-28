@@ -2,20 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef } from '@angular/core';
+import { NgChartsModule } from 'ng2-charts';
+import { ChartData, ChartType } from 'chart.js';
+
 
 import { PointsService, PointsDto } from '../../api';
 
 @Component({
   selector: 'app-race-points',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NgChartsModule],
   templateUrl: './race-points.html',
 })
 export class RacePoints implements OnInit {
   raceId?: number;
   points: PointsDto[] = [];
 
-  constructor(private pointsService: PointsService, private route: ActivatedRoute, private cdr: ChangeDetectorRef) {}
+  chartType: ChartType = 'bar';
+
+  chartData: ChartData<'bar'> = {
+    labels: [],
+    datasets: [
+      {
+        label: 'Points',
+        data: [],
+        backgroundColor: '#e10600'
+      }
+    ]
+  };
+
+  constructor(private pointsService: PointsService, private route: ActivatedRoute, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.params['id']);
@@ -25,6 +41,7 @@ export class RacePoints implements OnInit {
         next: (d) => {
           console.log('Loaded race points for', id, d);
           this.points = d ?? [];
+          this.updateChart();
           this.cdr.detectChanges();
         },
         error: (err) => {
@@ -42,10 +59,16 @@ export class RacePoints implements OnInit {
         // reload list
         this.pointsService.apiPointsRaceDriverNamesRaceIdGet(this.raceId!).subscribe(d => {
           this.points = d ?? [];
+          this.updateChart();
           this.cdr.detectChanges();
         });
       },
       error: (err) => console.error('Failed to delete points entry', err)
     });
+  }
+
+  private updateChart(): void {
+    this.chartData.labels = this.points.map(p => p.driverName ?? 'Unknown');
+    this.chartData.datasets[0].data = this.points.map(p => p.points ?? 0);
   }
 }
