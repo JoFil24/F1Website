@@ -7,7 +7,12 @@
       <th>Country</th>
       <th>Race Number</th>
       <th>Team</th>
-      <th style="text-align: center;"><a routerLink="/drivers/new">new</a></th>
+      <th style="text-align: center;">
+        <div class="d-flex gap-2 justify-content-center">
+          <a routerLink="/drivers/new">new</a>
+          <a routerLink="/driverTeams/new" class="btn btn-sm btn-outline-primary">Add Driver-Team Pair</a>
+        </div>
+      </th>
     </tr>
   </thead>
   <tbody class="table-primary">
@@ -20,6 +25,8 @@
         <div class="d-flex gap-2">
         <a [routerLink]="['/drivers/edit', driver.id]" class="btn btn-primary btn-sm">Edit</a>
         <button (click)="deleteDriver(driver.id!)" class="btn btn-danger btn-sm">Delete</button>
+          <button *ngIf="driver.teamId != null" (click)="removeDriverFromTeam(driver.id!, driver.teamId!)" class="btn btn-warning btn-sm">Remove driver from team</button>
+        <a *ngIf="driver.teamId == null" [routerLink]="['/driverTeams/new']" class="btn btn-secondary btn-sm">Add Team</a>
         </div>
       </td>
     </tr>

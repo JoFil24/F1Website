@@ -10,7 +10,6 @@ import { TracksList } from './tracks/tracks-list/tracks-list';
 import { TracksForm } from './tracks/tracks-form/tracks-form';
 import { RacesList } from './races/races-list/races-list';
 import { RacesForm } from './races/races-form/races-form';
-import { PointsList } from './points/points-list/points-list';
 import { PointsForm } from './points/points-form/points-form';
 import { RacePoints } from './points/race-points/race-points';
 import { DriverTeamsForm } from './driverTeams/driver-teams-form/driver-teams-form';
@@ -36,9 +35,9 @@ export const routes: Routes = [
     { path: 'points/new/:raceId', component: PointsForm },
     { path: 'points/edit/:driverId/:raceId', component: PointsForm },
 
-    // { path: 'driverTeams', component: RacesList },
+    // { path: 'driverTeams', component: DriverTeamsList },
     { path: 'driverTeams/new', component: DriverTeamsForm },
-    { path: 'driverTeams/edit/:id', component: DriverTeamsForm },
+    { path: 'driverTeams/edit/:driverId/:teamId', component: DriverTeamsForm },
 
     { path: '', redirectTo: 'drivers', pathMatch: 'full' },
 ];

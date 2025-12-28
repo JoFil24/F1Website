@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule} from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { DriversService, DriverTeamDto } from '../../api';
+import { DriversService, DriverTeamDto, DriverTeamsService } from '../../api';
 
 @Component({
   selector: 'app-driver-list',
@@ -13,7 +13,7 @@ import { DriversService, DriverTeamDto } from '../../api';
 export class DriverList implements OnInit {
   drivers: DriverTeamDto[] = [];
 
-  constructor(private driversService: DriversService, private cdr: ChangeDetectorRef) {}
+  constructor(private driversService: DriversService, private driverTeamsService: DriverTeamsService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadDrivers();
@@ -39,6 +39,14 @@ export class DriverList implements OnInit {
     this.driversService.apiDriversIdDelete(id).subscribe({
       next: () => this.loadDrivers(),
       error: (err) => console.error('Failed to delete driver', err)
+    });
+  }
+
+  removeDriverFromTeam(driverId?: number, teamId?: number): void {
+    if (!driverId || !teamId) return;
+    this.driverTeamsService.apiDriverTeamsDriverIdTeamIdDelete(driverId, teamId).subscribe({
+      next: () => this.loadDrivers(),
+      error: (err) => console.error('Failed to remove driver from team', err)
     });
   }
 
