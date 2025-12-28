@@ -1,9 +1,19 @@
-<h2>{{ isEdit ? 'Edit' : 'Create' }} Driver Team Pair</h2>
+<div class="container">
+  <h2>{{ isEdit ? 'Edit' : 'Create' }} Driver</h2>
 
-<form (ngSubmit)="save()">
-  <div class="d-flex gap-2">
-    <input [(ngModel)]="driver.name" name="name" placeholder="Name" required />
-    <input [(ngModel)]="driver.country" name="country" placeholder="Country" required />
-    <button class="btn btn-primary btn-sm" type="submit">Save</button>
-  </div>
-</form>
+  <form (ngSubmit)="save()">
+    <div class="row g-2">
+      <div class="col-12 col-sm-6">
+        <label class="form-label">Name</label>
+        <input class="form-control" [(ngModel)]="driver.name" name="name" placeholder="Name" required />
+      </div>
+      <div class="col-12 col-sm-6">
+        <label class="form-label">Country</label>
+        <input class="form-control" [(ngModel)]="driver.country" name="country" placeholder="Country" required />
+      </div>
+      <div class="col-12 mt-2">
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

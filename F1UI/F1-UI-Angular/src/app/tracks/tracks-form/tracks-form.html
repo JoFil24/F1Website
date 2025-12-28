@@ -1,10 +1,23 @@
-<h2>{{ isEdit ? 'Edit' : 'Create' }} Track</h2>
+<div class="container">
+  <h2>{{ isEdit ? 'Edit' : 'Create' }} Track</h2>
 
-<form (ngSubmit)="save()">
-  <div class="d-flex gap-2">
-  <input [(ngModel)]="track.name" name="name" placeholder="Name" required />
-  <input [(ngModel)]="track.country" name="country" placeholder="Country" required />
-  <input [(ngModel)]="track.length" name="length" placeholder="Length (km)" required />
-  <button class="btn btn-primary btn-sm" type="submit">Save</button>
-  </div>
-</form>
+  <form (ngSubmit)="save()">
+    <div class="row g-2">
+      <div class="col-12 col-md-4">
+        <label class="form-label">Name</label>
+        <input class="form-control" [(ngModel)]="track.name" name="name" placeholder="Name" required />
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="form-label">Country</label>
+        <input class="form-control" [(ngModel)]="track.country" name="country" placeholder="Country" required />
+      </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label">Length (km)</label>
+        <input class="form-control" [(ngModel)]="track.length" name="length" placeholder="Length (km)" required />
+      </div>
+      <div class="col-12 mt-2">
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+    </div>
+  </form>
+</div>

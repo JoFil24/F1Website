@@ -1,70 +1,88 @@
-<h2>{{ isEdit ? 'Edit' : 'Create' }} Driver Team Pair</h2>
+<div class="container">
+  <h2>{{ isEdit ? 'Edit' : 'Create' }} Driver Team Pair</h2>
 
-<form (ngSubmit)="save()">
-  <div *ngIf="isEdit">
-    <label>Driver</label>
-    <ng-container *ngIf="drivers === undefined || drivers.length === 0; else driversReadyEdit">
-      <select class="form-control" disabled>
-        <option>Loading...</option>
-      </select>
-    </ng-container>
-    <ng-template #driversReadyEdit>
-      <select [(ngModel)]="driverTeam.driverId" name="driver" class="form-control" disabled required>
-        <option [ngValue]="undefined">Choose a driver</option>
-        <option *ngFor="let d of drivers" [ngValue]="d.id">{{ d.name }}</option>
-      </select>
-    </ng-template>
+  <form (ngSubmit)="save()">
+    <div *ngIf="isEdit">
+      <div class="row g-2">
+        <div class="col-12 col-md-6">
+          <label class="form-label">Driver</label>
+          <ng-container *ngIf="drivers === undefined || drivers.length === 0; else driversReadyEdit">
+            <select class="form-control" disabled>
+              <option>Loading...</option>
+            </select>
+          </ng-container>
+          <ng-template #driversReadyEdit>
+            <select [(ngModel)]="driverTeam.driverId" name="driver" class="form-control" disabled required>
+              <option [ngValue]="undefined">Choose a driver</option>
+              <option *ngFor="let d of drivers" [ngValue]="d.id">{{ d.name }}</option>
+            </select>
+          </ng-template>
+        </div>
 
-    <label>Race Number</label>
-    <input type="number" [(ngModel)]="driverTeam.raceNumber" name="raceNumber" class="form-control" min="0" />
+        <div class="col-12 col-md-3">
+          <label class="form-label">Race Number</label>
+          <input type="number" [(ngModel)]="driverTeam.raceNumber" name="raceNumber" class="form-control" min="0" />
+        </div>
 
-    <label>Team</label>
-    <ng-container *ngIf="teams === undefined || teams.length === 0; else teamsReadyEdit">
-      <select class="form-control" disabled>
-        <option>Loading...</option>
-      </select>
-    </ng-container>
-    <ng-template #teamsReadyEdit>
-      <select [(ngModel)]="driverTeam.teamId" name="team" class="form-control" required>
-        <option [ngValue]="undefined">Choose a team</option>
-        <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name }}</option>
-      </select>
-    </ng-template>
-  </div>
+        <div class="col-12 col-md-3">
+          <label class="form-label">Team</label>
+          <ng-container *ngIf="teams === undefined || teams.length === 0; else teamsReadyEdit">
+            <select class="form-control" disabled>
+              <option>Loading...</option>
+            </select>
+          </ng-container>
+          <ng-template #teamsReadyEdit>
+            <select [(ngModel)]="driverTeam.teamId" name="team" class="form-control" required>
+              <option [ngValue]="undefined">Choose a team</option>
+              <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name }}</option>
+            </select>
+          </ng-template>
+        </div>
+      </div>
+    </div>
 
-  <div *ngIf="!isEdit">
-    <label>Driver</label>
-    <ng-container *ngIf="drivers === undefined || drivers.length === 0; else driversReady">
-      <select class="form-control" disabled>
-        <option>Loading...</option>
-      </select>
-    </ng-container>
-    <ng-template #driversReady>
-      <select [(ngModel)]="driverTeam.driverId" name="driver" class="form-control" required>
-        <option [ngValue]="undefined">Choose a driver</option>
-        <option *ngFor="let d of availableDrivers" [ngValue]="d.id">{{ d.name }}</option>
-      </select>
-    </ng-template>
+    <div *ngIf="!isEdit" class="row g-2 mt-3">
+      <div class="col-12 col-md-6">
+        <label class="form-label">Driver</label>
+        <ng-container *ngIf="drivers === undefined || drivers.length === 0; else driversReady">
+          <select class="form-control" disabled>
+            <option>Loading...</option>
+          </select>
+        </ng-container>
+        <ng-template #driversReady>
+          <select [(ngModel)]="driverTeam.driverId" name="driver" class="form-control" required>
+            <option [ngValue]="undefined">Choose a driver</option>
+            <option *ngFor="let d of availableDrivers" [ngValue]="d.id">{{ d.name }}</option>
+          </select>
+        </ng-template>
+      </div>
 
-    <label>Race Number</label>
-    <input type="number" [(ngModel)]="driverTeam.raceNumber" name="raceNumber" class="form-control" min="0" />
+      <div class="col-12 col-md-3">
+        <label class="form-label">Race Number</label>
+        <input type="number" [(ngModel)]="driverTeam.raceNumber" name="raceNumber" class="form-control" min="0" />
+      </div>
 
-    <label>Team</label>
-    <ng-container *ngIf="teams === undefined || teams.length === 0; else teamsReady">
-      <select class="form-control" disabled>
-        <option>Loading...</option>
-      </select>
-    </ng-container>
-    <ng-template #teamsReady>
-      <select [(ngModel)]="driverTeam.teamId" name="team" class="form-control" required>
-        <option [ngValue]="undefined">Choose a team</option>
-        <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name }}</option>
-      </select>
-    </ng-template>
-  </div>
+      <div class="col-12 col-md-3">
+        <label class="form-label">Team</label>
+        <ng-container *ngIf="teams === undefined || teams.length === 0; else teamsReady">
+          <select class="form-control" disabled>
+            <option>Loading...</option>
+          </select>
+        </ng-container>
+        <ng-template #teamsReady>
+          <select [(ngModel)]="driverTeam.teamId" name="team" class="form-control" required>
+            <option [ngValue]="undefined">Choose a team</option>
+            <option *ngFor="let t of teams" [ngValue]="t.id">{{ t.name }}</option>
+          </select>
+        </ng-template>
+      </div>
+    </div>
 
-  <div style="margin-top:10px">
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a [routerLink]="['/drivers']" class="btn btn-secondary">Cancel</a>
-  </div>
-</form>
+    <div class="row mt-3">
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a [routerLink]="['/drivers']" class="btn btn-secondary ms-2">Cancel</a>
+      </div>
+    </div>
+  </form>
+</div>
